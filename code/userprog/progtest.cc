@@ -94,11 +94,47 @@ ConsoleTest (const char *in, const char *out)
           readAvail->P ();        // wait for character to arrive
           ch = console->RX ();
 
+          /*
+                    if(ch == 'q')
+          {
+            char* message = "Au revoir\n";
+            for(int i = 0; i < 10; i++)
+            {
+                console->TX(message[i]);
+                writeDone->P ();
+            }
+          }
+          else
+          {
+            console->TX (ch);        // echo it!
+            writeDone->P ();        // wait for write to finish
+          }*/
+
+          
+          //Action II.3. Modifiez userprog/progtest.cc pour faire écrire <x> au lieu de x
+          bool enter = (ch == '\n');
+          
+          if(!enter)
+          {
+            console->TX ('<');
+            writeDone->P ();
+          }
+          //Action II.3.
+
           console->TX (ch);        // echo it!
           writeDone->P ();        // wait for write to finish
 
+        
+          //Action II.3.
+          if(!enter)
+          {
+            console->TX ('>');
+            writeDone->P ();
+          }
+
+          //II.2 Au revoir
           if (ch == 'q') {
-              printf ("Nothing more, bye!\n");
+              printf ("Au revoir\n");
               break;                // if q, quit
           }
       }
