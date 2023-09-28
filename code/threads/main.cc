@@ -118,9 +118,25 @@ main (int argc, char **argv)
           if (!strcmp (*argv, "-x"))
             {                        // run a user program
                 ASSERT_MSG (argc > 1, "-x needs a program name\n");
+
+                //Action IV.1.
+                consoledriver = new ConsoleDriver(NULL, NULL);
+
                 StartProcess (*(argv + 1));
                 argCount = 2;
             }
+          else if(!strcmp (*argv, "-sc"))
+          {
+            /// une option -sc de test de la console synchrone qui lance la fonction ConsoleDriverTest que l’on a ajouté
+            if (argc == 1)
+                    ConsoleDriverTest(NULL, NULL);
+                else
+                  {
+                      ASSERT_MSG (argc > 2, "-sc needs two file names\n");
+                      ConsoleDriverTest (*(argv + 1), *(argv + 2));
+                      argCount = 3;
+                  }
+          }
           else if (!strcmp (*argv, "-c"))
             {                        // test the console
                 if (argc == 1)

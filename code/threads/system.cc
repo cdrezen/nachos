@@ -40,6 +40,16 @@ PostOffice *postOffice;
 #endif
 
 
+
+//Action IV.1
+#ifdef CHANGED
+#ifdef USER_PROGRAM
+ConsoleDriver *consoledriver;
+#endif
+#endif
+
+
+
 // External definition, to allow us to take a pointer to this function
 extern void Cleanup ();
 
@@ -245,6 +255,19 @@ Cleanup ()
         synchDisk = NULL;
     }
 #endif
+
+
+//Action IV
+#ifdef CHANGED
+    #ifdef USER_PROGRAM
+        if(consoledriver)
+        {
+            delete consoledriver;
+            consoledriver = NULL;
+        }
+    #endif
+#endif
+
 
     if (timer) {
         delete timer;
