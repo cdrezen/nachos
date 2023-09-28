@@ -1,7 +1,6 @@
 #ifdef CHANGED
 #ifndef CONSOLEDRIVER_H
 #define CONSOLEDRIVER_H
-3
 #include "copyright.h"
 #include "utility.h"
 #include "console.h"

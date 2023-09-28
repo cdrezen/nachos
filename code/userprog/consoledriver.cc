@@ -4,6 +4,7 @@
 #include "consoledriver.h"
 #include "synch.h"
 
+
 static Semaphore *readAvail;
 static Semaphore *writeDone;
 
@@ -26,12 +27,16 @@ ConsoleDriver::~ConsoleDriver()
 
 void ConsoleDriver::PutChar(int ch)
 {
-// ...
+    console->TX (ch);        // echo it!
+    writeDone->P ();        // wait for write to finish
 }
 
 int ConsoleDriver::GetChar()
 {
-// ...
+
+ readAvail->P ();        // wait for character to arrive
+ char ch = console->RX ();
+ return ch;
 }
 
 void ConsoleDriver::PutString(const char *s)
