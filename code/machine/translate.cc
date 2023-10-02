@@ -143,7 +143,7 @@ Machine::ReadMem(int virtAddr, int size, int *value)
 //----------------------------------------------------------------------
 
 bool
-Machine::WriteMem(int virtAddr, int size, int value)
+Machine::(int virtAddr, int size, int value)
 {
     ExceptionType exception;
     int physicalAddress;
