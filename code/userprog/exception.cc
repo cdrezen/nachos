@@ -90,6 +90,26 @@ ExceptionHandler (ExceptionType which)
                     consoledriver->PutChar(machine->ReadRegister(4));
                     break;
                   }
+                case SC_GetChar:
+                  {
+                    machine->WriteRegister(2, consoledriver->GetChar());
+                    break;
+                  }
+                case SC_PutString:
+                {
+                  break;
+                }
+                case SC_GetString:
+                {
+                  printf("GetString\n");
+                  int test = machine->ReadRegister(2);
+                  printf("%d\n", test);
+                  printf("%s\n", (char*)test);
+                  test = machine->ReadRegister(4);
+                  printf("%d\n", test);
+                  printf("%s\n", (char*)test);
+                  break;
+                }
                 #endif
                 
                 default:

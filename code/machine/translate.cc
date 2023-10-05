@@ -39,28 +39,30 @@
 // being NOPs when the host machine is also little endian (DEC and Intel).
 
 unsigned int
-WordToHost(unsigned int word) {
+WordToHost(unsigned int word)
+{
 #ifdef HOST_IS_BIG_ENDIAN
-         register unsigned long result;
-         result = (word >> 24) & 0x000000ff;
-         result |= (word >> 8) & 0x0000ff00;
-         result |= (word << 8) & 0x00ff0000;
-         result |= (word << 24) & 0xff000000;
-         return result;
+    register unsigned long result;
+    result = (word >> 24) & 0x000000ff;
+    result |= (word >> 8) & 0x0000ff00;
+    result |= (word << 8) & 0x00ff0000;
+    result |= (word << 24) & 0xff000000;
+    return result;
 #else
-         return word;
+    return word;
 #endif /* HOST_IS_BIG_ENDIAN */
 }
 
 unsigned short
-ShortToHost(unsigned short shortword) {
+ShortToHost(unsigned short shortword)
+{
 #ifdef HOST_IS_BIG_ENDIAN
-         register unsigned short result;
-         result = (shortword << 8) & 0xff00;
-         result |= (shortword >> 8) & 0x00ff;
-         return result;
+    register unsigned short result;
+    result = (shortword << 8) & 0xff00;
+    result |= (shortword >> 8) & 0x00ff;
+    return result;
 #else
-         return shortword;
+    return shortword;
 #endif /* HOST_IS_BIG_ENDIAN */
 }
 
@@ -69,7 +71,6 @@ WordToMachine(unsigned int word) { return WordToHost(word); }
 
 unsigned short
 ShortToMachine(unsigned short shortword) { return ShortToHost(shortword); }
-
 
 //----------------------------------------------------------------------
 // Machine::ReadMem
@@ -84,38 +85,40 @@ ShortToMachine(unsigned short shortword) { return ShortToHost(shortword); }
 //	"value" -- the place to write the result
 //----------------------------------------------------------------------
 
-bool
-Machine::ReadMem(int virtAddr, int size, int *value, bool debug)
+bool Machine::ReadMem(int virtAddr, int size, int *value, bool debug)
 {
     int data;
     ExceptionType exception;
     int physicalAddress;
 
     if (debug)
-	DEBUG('a', "Reading VA 0x%x, size %d\n", virtAddr, size);
+        DEBUG('a', "Reading VA 0x%x, size %d\n", virtAddr, size);
 
     exception = Translate(virtAddr, &physicalAddress, size, FALSE, debug);
-    if (exception != NoException) {
-	machine->RaiseException(exception, virtAddr);
+    if (exception != NoException)
+    {
+        machine->RaiseException(exception, virtAddr);
         return FALSE;
     }
-    switch (size) {
-      case 1:
+    switch (size)
+    {
+    case 1:
         data = machine->mainMemory[physicalAddress];
         *value = data;
         break;
 
-      case 2:
-        data = *(unsigned short *) &machine->mainMemory[physicalAddress];
+    case 2:
+        data = *(unsigned short *)&machine->mainMemory[physicalAddress];
         *value = ShortToHost(data);
         break;
 
-      case 4:
-        data = *(unsigned int *) &machine->mainMemory[physicalAddress];
+    case 4:
+        data = *(unsigned int *)&machine->mainMemory[physicalAddress];
         *value = WordToHost(data);
         break;
 
-      default: ASSERT_MSG(FALSE, "Invalid size %d\n", size);
+    default:
+        ASSERT_MSG(FALSE, "Invalid size %d\n", size);
     }
 
     if (debug)
@@ -123,8 +126,7 @@ Machine::ReadMem(int virtAddr, int size, int *value, bool debug)
     return (TRUE);
 }
 
-bool
-Machine::ReadMem(int virtAddr, int size, int *value)
+bool Machine::ReadMem(int virtAddr, int size, int *value)
 {
     return ReadMem(virtAddr, size, value, TRUE);
 }
@@ -142,8 +144,7 @@ Machine::ReadMem(int virtAddr, int size, int *value)
 //	"value" -- the data to be written
 //----------------------------------------------------------------------
 
-bool
-Machine::WriteMem(int virtAddr, int size, int value)
+bool Machine::WriteMem(int virtAddr, int size, int value)
 {
     ExceptionType exception;
     int physicalAddress;
@@ -151,26 +152,27 @@ Machine::WriteMem(int virtAddr, int size, int value)
     DEBUG('a', "Writing VA 0x%x, size %d, value 0x%x\n", virtAddr, size, value);
 
     exception = Translate(virtAddr, &physicalAddress, size, TRUE, TRUE);
-    if (exception != NoException) {
-	machine->RaiseException(exception, virtAddr);
+    if (exception != NoException)
+    {
+        machine->RaiseException(exception, virtAddr);
         return FALSE;
     }
-    switch (size) {
-      case 1:
-        machine->mainMemory[physicalAddress] = (unsigned char) (value & 0xff);
+    switch (size)
+    {
+    case 1:
+        machine->mainMemory[physicalAddress] = (unsigned char)(value & 0xff);
         break;
 
-      case 2:
-        *(unsigned short *) &machine->mainMemory[physicalAddress]
-                = ShortToMachine((unsigned short) (value & 0xffff));
+    case 2:
+        *(unsigned short *)&machine->mainMemory[physicalAddress] = ShortToMachine((unsigned short)(value & 0xffff));
         break;
 
-      case 4:
-        *(unsigned int *) &machine->mainMemory[physicalAddress]
-                = WordToMachine((unsigned int) value);
+    case 4:
+        *(unsigned int *)&machine->mainMemory[physicalAddress] = WordToMachine((unsigned int)value);
         break;
 
-      default: ASSERT_MSG(FALSE, "Invalid size %d\n", size);
+    default:
+        ASSERT_MSG(FALSE, "Invalid size %d\n", size);
     }
 
     return TRUE;
@@ -192,18 +194,21 @@ Machine::WriteMem(int virtAddr, int size, int value)
 //----------------------------------------------------------------------
 
 ExceptionType
-Machine::Translate(int virtAddr, int* physAddr, int size, bool writing, bool debug)
+Machine::Translate(int virtAddr, int *physAddr, int size, bool writing, bool debug)
 {
     int i;
     unsigned int vpn, offset;
     TranslationEntry *entry;
     unsigned int pageFrame;
 
-    if (debug) DEBUG('a', "\tTranslate 0x%x, %s: ", virtAddr, writing ? "write" : "read");
+    if (debug)
+        DEBUG('a', "\tTranslate 0x%x, %s: ", virtAddr, writing ? "write" : "read");
 
-// check for alignment errors
-    if (((size == 4) && (virtAddr & 0x3)) || ((size == 2) && (virtAddr & 0x1))){
-        if (debug) DEBUG('a', "alignment problem at %d, size %d!\n", virtAddr, size);
+    // check for alignment errors
+    if (((size == 4) && (virtAddr & 0x3)) || ((size == 2) && (virtAddr & 0x1)))
+    {
+        if (debug)
+            DEBUG('a', "alignment problem at %d, size %d!\n", virtAddr, size);
         return AddressErrorException;
     }
 
@@ -211,41 +216,58 @@ Machine::Translate(int virtAddr, int* physAddr, int size, bool writing, bool deb
     ASSERT_MSG(tlb == NULL || currentPageTable == NULL, "We don't have a TLB nor a page table!\n");
     ASSERT_MSG(tlb != NULL || currentPageTable != NULL, "We have both a TLB and a page table!\n");
 
-// calculate the virtual page number, and offset within the page,
-// from the virtual address
-    vpn = (unsigned) virtAddr / PageSize;
-    offset = (unsigned) virtAddr % PageSize;
+    // calculate the virtual page number, and offset within the page,
+    // from the virtual address
+    vpn = (unsigned)virtAddr / PageSize;
+    offset = (unsigned)virtAddr % PageSize;
 
-    if (tlb == NULL) {		// => page table => vpn is index into table
-        if (vpn >= currentPageTableSize) {
-            if (debug) DEBUG('a', "virtual page # %d too large for page table size %d!\n",
-                        virtAddr, currentPageTableSize);
+    if (tlb == NULL)
+    { // => page table => vpn is index into table
+        if (vpn >= currentPageTableSize)
+        {
+            if (debug)
+                DEBUG('a', "virtual page # %d too large for page table size %d!\n",
+                      virtAddr, currentPageTableSize);
             return AddressErrorException;
-        } else if (!currentPageTable[vpn].valid) {
-            if (debug) DEBUG('a', "virtual page # %d : page %d is invalid !\n",
-                        virtAddr, vpn);
+        }
+        else if (!currentPageTable[vpn].valid)
+        {
+            if (debug)
+                DEBUG('a', "virtual page # %d : page %d is invalid !\n",
+                      virtAddr, vpn);
             return PageFaultException;
         }
         entry = &currentPageTable[vpn];
-    } else {
+    }
+    else
+    {
         for (entry = NULL, i = 0; i < TLBSize; i++)
-            if (tlb[i].valid && (tlb[i].virtualPage == vpn)) {
-                entry = &tlb[i];                        // FOUND!
+            if (tlb[i].valid && (tlb[i].virtualPage == vpn))
+            {
+                entry = &tlb[i]; // FOUND!
                 break;
             }
-        if (entry == NULL) {                                // not found
-            if (debug) DEBUG('a', "*** no valid TLB entry found for this virtual page!\n");
-            return PageFaultException;		// really, this is a TLB fault,
-                                                // the page may be in memory,
-                                                // but not in the TLB
+        if (entry == NULL)
+        { // not found
+            if (debug)
+                DEBUG('a', "*** no valid TLB entry found for this virtual page!\n");
+            return PageFaultException; // really, this is a TLB fault,
+                                       // the page may be in memory,
+                                       // but not in the TLB
         }
     }
 
-    if (entry->readOnly && writing) {	// trying to write to a read-only page
-        if (tlb == NULL) {
-            if (debug) DEBUG('a', "%d mapped read-only in page table!\n", virtAddr);
-        } else {
-            if (debug) DEBUG('a', "%d mapped read-only at %d in TLB!\n", virtAddr, i);
+    if (entry->readOnly && writing)
+    { // trying to write to a read-only page
+        if (tlb == NULL)
+        {
+            if (debug)
+                DEBUG('a', "%d mapped read-only in page table!\n", virtAddr);
+        }
+        else
+        {
+            if (debug)
+                DEBUG('a', "%d mapped read-only at %d in TLB!\n", virtAddr, i);
         }
         return ReadOnlyException;
     }
@@ -253,44 +275,69 @@ Machine::Translate(int virtAddr, int* physAddr, int size, bool writing, bool deb
 
     // if the pageFrame is too big, there is something really wrong!
     // An invalid translation was loaded into the page table or TLB.
-    if (pageFrame >= NumPhysPages) {
-        if (debug) DEBUG('a', "*** frame %d > %d!\n", pageFrame, NumPhysPages);
+    if (pageFrame >= NumPhysPages)
+    {
+        if (debug)
+            DEBUG('a', "*** frame %d > %d!\n", pageFrame, NumPhysPages);
         return BusErrorException;
     }
-    entry->use = TRUE;		// set the use, dirty bits
+    entry->use = TRUE; // set the use, dirty bits
     if (writing)
         entry->dirty = TRUE;
     *physAddr = pageFrame * PageSize + offset;
     ASSERT_MSG((*physAddr >= 0) && ((*physAddr + size) <= MemorySize), "Invalid physical address %d (memory size is %d)\n", *physAddr, MemorySize);
-    if (debug) DEBUG('a', "phys addr = 0x%x\n", *physAddr);
+    if (debug)
+        DEBUG('a', "phys addr = 0x%x\n", *physAddr);
     return NoException;
 }
 
 #ifdef CHANGED
-bool copyStringToMachine(int to_ptr, char *buf, unsigned size)
+/*
+bool Machine::copyStringToMachine(int to_ptr, char *buf, unsigned size)
 {
     //on cherche \n
     unsigned char *entre_ptr = (unsigned char *)memchr((void *)buf, '\n', size);
     if (entre_ptr != NULL) size = ++entre_ptr - (unsigned char *)buf;
-    
-    if (size <= sizeof(int))
+
+    if (size <= sizeof(int) && size != 3)
     {
-        if (!WriteMem(to_ptr, size, buf)) return false;
+        if (!WriteMem(to_ptr, size, (int)buf)) return false;
     }
     else
     {
-        for(int i = 0; i < size;)//on ecrit 4 bytes par 4 bytes max
+        for(int i = 0; i < size;)//on ecrit 4 bytes par 4 bytes max ou 1 puis 2 si 3 bytes
         {
              int tmp_size = i + sizeof(int ) > size ? sizeof(int) : size - i;
 
+             if(tmp_size == 3) tmp_size--; // on ne peut pas ecrire 3 octets
+
              if (!WriteMem(to_ptr+i, tmp_size, (int)(buf+i))) return false;
-             
+
              i += tmp_size;
         }
     }
 
     // on rajoutte la terminaison du string
     if (!WriteMem(to_ptr+size, 1, '\0')) return false;
+
+    return true;
+}
+*/
+bool Machine::copyStringToMachine(int to_ptr, char *buf, unsigned size)
+{
+    /*à mettre dans GetString
+    //on cherche \n
+    unsigned char *entre_ptr = (unsigned char *)memchr((void *)buf, '\n', size);
+    if (entre_ptr != NULL) size = ++entre_ptr - (unsigned char *)buf;
+    */
+
+    for (int i = 0; i < size; i++) // on ecrit 1 byte à la fois
+    {
+        if (!WriteMem(to_ptr + i, 1, (int)buf[i])) return false;
+    }
+
+    // on rajoute la terminaison du string
+    if (!WriteMem(to_ptr + size, 1, '\0')) return false;
 
     return true;
 }

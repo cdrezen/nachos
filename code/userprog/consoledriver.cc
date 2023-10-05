@@ -31,11 +31,11 @@ void ConsoleDriver::PutChar(int ch)
     writeDone->P ();        // wait for write to finish
 }
 
-int ConsoleDriver::GetChar()
+char ConsoleDriver::GetChar()
 {
 
  readAvail->P ();        // wait for character to arrive
- char ch = console->RX ();
+ char ch = console->RX();
  return ch;
 }
 
@@ -46,7 +46,7 @@ void ConsoleDriver::PutString(const char *s)
 
 void ConsoleDriver::GetString(char *s, int n)
 {
-// ...
+    for(int i = 0; i < n; i++) s[i] = GetChar();
 }
 
 #endif // CHANGED

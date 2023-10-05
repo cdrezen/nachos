@@ -31,8 +31,16 @@
 #define SC_Close	8
 #define SC_Fork		9
 #define SC_Yield	10
-//Action IV.2.
-#define SC_PutChar  11
+
+#ifdef CHANGED
+    //Action IV.2.
+    #define SC_PutChar  11
+    //VII
+    #define SC_GetChar  12
+
+    #define SC_PutString 13
+    #define SC_GetString  14
+#endif
 
 #ifdef IN_USER_MODE
 

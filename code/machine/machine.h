@@ -143,6 +143,10 @@ class Machine:public dontcopythis {
                                 // and return an exception code if the
                                 // translation couldn't be completed.
 
+    #ifdef CHANGED
+    bool copyStringToMachine(int to_ptr, char *buf, unsigned size);
+    #endif //CHANGED
+
     void RaiseException(ExceptionType which, int badVAddr);
                                 // Trap to the Nachos kernel, because of a
                                 // system call or other exception.
