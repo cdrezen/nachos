@@ -265,3 +265,33 @@ Machine::Translate(int virtAddr, int* physAddr, int size, bool writing, bool deb
     if (debug) DEBUG('a', "phys addr = 0x%x\n", *physAddr);
     return NoException;
 }
+
+#ifdef CHANGED
+bool copyStringToMachine(int to_ptr, char *buf, unsigned size)
+{
+    //on cherche \n
+    unsigned char *entre_ptr = (unsigned char *)memchr((void *)buf, '\n', size);
+    if (entre_ptr != NULL) size = ++entre_ptr - (unsigned char *)buf;
+    
+    if (size <= sizeof(int))
+    {
+        if (!WriteMem(to_ptr, size, buf)) return false;
+    }
+    else
+    {
+        for(int i = 0; i < size;)//on ecrit 4 bytes par 4 bytes max
+        {
+             int tmp_size = i + sizeof(int ) > size ? sizeof(int) : size - i;
+
+             if (!WriteMem(to_ptr+i, tmp_size, (int)(buf+i))) return false;
+             
+             i += tmp_size;
+        }
+    }
+
+    // on rajoutte la terminaison du string
+    if (!WriteMem(to_ptr+size, 1, '\0')) return false;
+
+    return true;
+}
+#endif
