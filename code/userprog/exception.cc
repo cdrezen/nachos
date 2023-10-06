@@ -116,7 +116,7 @@ ExceptionHandler (ExceptionType which)
                       break;
                     }
 
-                    buf1[i] = c;
+                    //buf1[i] = c;
                   }
 
                   machine->copyStringToMachine(to, buf1, size);
