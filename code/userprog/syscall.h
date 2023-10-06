@@ -142,6 +142,7 @@ void Yield (void);
 
 //Action IV.2.
 void PutChar(char c);
+void GetString(char *s, int n);
 
 #endif // IN_USER_MODE
 

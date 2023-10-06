@@ -9,7 +9,7 @@ int main()
     PutChar('t');
     PutChar('\n');
     GetString((char*)test, 5);
-    for(int i = 0; i < 5; i++)
+    for (int i = 0; i < 5; i++)
     {
         PutChar(test[i]);
     }
