@@ -103,7 +103,7 @@ ExceptionHandler (ExceptionType which)
                 {
                   printf("GetString\n");
                   //int test = machine->ReadRegister(2);
-                  char* buf[MAX_STRING_SIZE];
+                  char buf[MAX_STRING_SIZE];
                   int size = 0;
 
                   for(int i = 0; i < MAX_STRING_SIZE; i++)
