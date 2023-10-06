@@ -104,7 +104,7 @@ ExceptionHandler (ExceptionType which)
                   printf("GetString\n");
                   int to = machine->ReadRegister(4);
                   int size = machine->ReadRegister(5);
-                  char buf = new char[size];
+                  char* buf = new char[size];
 
                   for(int i = 0; i < size; i++)
                   {
