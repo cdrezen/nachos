@@ -333,7 +333,7 @@ bool Machine::copyStringToMachine(int to_ptr, char *buf, unsigned size)
 
     for (int i = 0; i < size; i++) // on ecrit 1 byte à la fois
     {
-        if (!WriteMem(to_ptr + i, 1, (int)buf[i])) return false;
+        if (!WriteMem(to_ptr + i, 1, (int)&(buf[i]))) return false;
     }
 
     // on rajoute la terminaison du string
