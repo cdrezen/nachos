@@ -1,5 +1,7 @@
 #include "syscall.h"
 
+char buf[7];
+
 int main()
 {
     char* test = "test\n";
@@ -10,14 +12,12 @@ int main()
         PutChar(test[i]);
     }
 
-    char buf[7];
-
     GetString(buf, 5);
 
     for(i = 0; i < 7; i++)
     {
         PutChar(buf[i]);
     }
-    
+
     Halt();
 }
