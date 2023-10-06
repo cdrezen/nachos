@@ -105,6 +105,8 @@ ExceptionHandler (ExceptionType which)
                   int to = machine->ReadRegister(4);
                   char buf[MAX_STRING_SIZE];
                   int size = 0;
+                  int sizetest = machine->ReadRegister(5);
+                  printf("size?: %d", sizetest);
 
                   for(int i = 0; i < MAX_STRING_SIZE; i++)
                   {
