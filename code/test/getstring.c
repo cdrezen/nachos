@@ -10,6 +10,9 @@ int main()
     PutChar('t');
     PutChar('\n');
     GetString(test, 4);
-    printf("%s", test);
+    for(int i = 0; i < 5; i++)
+    {
+        PutChar(test[i]);
+    }
     Halt();
 }
