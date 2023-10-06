@@ -2,17 +2,22 @@
 
 int main()
 {
-    char test[100];
-    PutChar('t');
-    PutChar('e');
-    PutChar('s');
-    PutChar('t');
-    PutChar('\n');
-    GetString(test, 5);
-    PutChar(test[0]);
-    PutChar(test[1]);
-    PutChar(test[2]);
-    PutChar(test[3]);
-    PutChar(test[4]);
+    char* test = "test\n";
+
+    int i = 0;
+    for(i = 0; i < 5; i++)
+    {
+        PutChar(test[i]);
+    }
+
+    char buf[7];
+
+    GetString(buf, 5);
+
+    for(i = 0; i < 7; i++)
+    {
+        PutChar(buf[i]);
+    }
+    
     Halt();
 }
