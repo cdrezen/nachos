@@ -6,14 +6,9 @@ int main()
 {
     char* test = "test\n";
 
-    int i = 0;
-    for(i = 0; i < 5; i++)
-    {
-        PutChar(test[i]);
-    }
-
     GetString(buf, 5);
 
+    int i = 0;
     for(i = 0; i < 7; i++)
     {
         PutChar(buf[i]);
