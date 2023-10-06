@@ -105,6 +105,7 @@ ExceptionHandler (ExceptionType which)
                   int to = machine->ReadRegister(4);
                   int size = machine->ReadRegister(5);
                   char* buf = new char[size];
+                  char buf1[100];
 
                   for(int i = 0; i < size; i++)
                   {
@@ -115,10 +116,10 @@ ExceptionHandler (ExceptionType which)
                       break;
                     }
 
-                    buf[i] = c;
+                    buf1[i] = c;
                   }
 
-                  machine->copyStringToMachine(to, buf, size);
+                  machine->copyStringToMachine(to, buf1, size);
                   delete [] buf;
 
                   break;
