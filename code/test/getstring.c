@@ -5,7 +5,7 @@
 int main()
 {
 
-    char* test = malloc(5);
+    char test[5];
     PutChar('t');
     PutChar('e');
     PutChar('s');
@@ -13,6 +13,5 @@ int main()
     PutChar('\n');
     GetString(test, 4);
     printf("%s", test);
-    free(test);
     Halt();
 }
