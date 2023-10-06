@@ -2,14 +2,13 @@
 
 int main()
 {
-
     char test[5];
     PutChar('t');
     PutChar('e');
     PutChar('s');
     PutChar('t');
     PutChar('\n');
-    GetString(test, 4);
+    GetString(test);
     for(int i = 0; i < 5; i++)
     {
         PutChar(test[i]);
