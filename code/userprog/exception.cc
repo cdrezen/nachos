@@ -120,7 +120,7 @@ ExceptionHandler (ExceptionType which)
                   }
 
                   machine->copyStringToMachine(to, buf, size);
-                  free(buf);
+                  //free(buf);
 
                   break;
                 }
