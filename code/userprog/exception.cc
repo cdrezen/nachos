@@ -102,7 +102,7 @@ ExceptionHandler (ExceptionType which)
                 case SC_GetString:
                 {
                   printf("GetString\n");
-                  //int test = machine->ReadRegister(2);
+                  int to = machine->ReadRegister(4);
                   char buf[MAX_STRING_SIZE];
                   int size = 0;
 
@@ -118,7 +118,7 @@ ExceptionHandler (ExceptionType which)
                     buf[i] = c;
                   }
 
-                  machine->copyStringToMachine(2, buf, size);
+                  machine->copyStringToMachine(to, buf, size);
 
                   break;
                 }
