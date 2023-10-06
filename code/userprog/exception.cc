@@ -102,12 +102,24 @@ ExceptionHandler (ExceptionType which)
                 case SC_GetString:
                 {
                   printf("GetString\n");
-                  int test = machine->ReadRegister(2);
-                  printf("%d\n", test);
-                  printf("%s\n", (char*)test);
-                  test = machine->ReadRegister(4);
-                  printf("%d\n", test);
-                  printf("%s\n", (char*)test);
+                  //int test = machine->ReadRegister(2);
+                  char* buf[MAX_STRING_SIZE];
+                  int size = 0;
+
+                  for(int i = 0; i < MAX_STRING_SIZE; i++)
+                  {
+                    char c = consoledriver->GetChar();
+                    if(c == '\n' || c == '\0')
+                    {
+                      size = i;
+                      break;
+                    }
+
+                    buf[i] = c;
+                  }
+
+                  machine->copyStringToMachine(2, buf, size);
+
                   break;
                 }
                 #endif
