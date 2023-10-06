@@ -8,8 +8,9 @@ int main()
     PutChar('s');
     PutChar('t');
     PutChar('\n');
-    GetString(test);
-    for(int i = 0; i < 5; i++)
+    char test1[7];
+    GetString(test1, 7);
+    for(int i = 0; i < 7; i++)
     {
         PutChar(test[i]);
     }
