@@ -103,12 +103,10 @@ ExceptionHandler (ExceptionType which)
                 {
                   printf("GetString\n");
                   int to = machine->ReadRegister(4);
-                  char buf[MAX_STRING_SIZE];
-                  int size = 0;
-                  int sizetest = machine->ReadRegister(5);
-                  printf("size?: %d", sizetest);
+                  int size = machine->ReadRegister(5);
+                  char buf = new char[size];
 
-                  for(int i = 0; i < MAX_STRING_SIZE; i++)
+                  for(int i = 0; i < size; i++)
                   {
                     char c = consoledriver->GetChar();
                     if(c == '\n' || c == '\0')
@@ -117,10 +115,11 @@ ExceptionHandler (ExceptionType which)
                       break;
                     }
 
-                    buf[i] = c;
+                    //buf[i] = c;
                   }
 
                   machine->copyStringToMachine(to, buf, size);
+                  delete [] buf;
 
                   break;
                 }
