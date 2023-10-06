@@ -121,7 +121,7 @@ ExceptionHandler (ExceptionType which)
 
                   machine->copyStringToMachine(to, buf1, size);
                   free(buf);
-                  delete buf1;
+                  delete [] buf1;
 
                   break;
                 }
