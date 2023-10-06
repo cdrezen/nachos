@@ -2,7 +2,7 @@
 
 int main()
 {
-    char test[5];
+    char test[100];
     PutChar('t');
     PutChar('e');
     PutChar('s');
