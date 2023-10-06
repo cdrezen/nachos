@@ -104,8 +104,7 @@ ExceptionHandler (ExceptionType which)
                   printf("GetString\n");
                   int to = machine->ReadRegister(4);
                   int size = machine->ReadRegister(5);
-                  char* buf = (char*)malloc(size);
-                  char* buf1 = new char[size];
+                  char* buf = new char[size];
 
                   for(int i = 0; i < size; i++)
                   {
@@ -116,12 +115,11 @@ ExceptionHandler (ExceptionType which)
                       break;
                     }
 
-                    buf1[i] = c;
+                    buf[i] = c;
                   }
 
-                  machine->copyStringToMachine(to, buf1, size);
-                  free(buf);
-                  delete [] buf1;
+                  machine->copyStringToMachine(to, buf, size);
+                  delete[] buf;
 
                   break;
                 }
