@@ -125,18 +125,20 @@ main (int argc, char **argv)
                 StartProcess (*(argv + 1));
                 argCount = 2;
             }
-          else if(!strcmp (*argv, "-sc"))
-          {
-            /// une option -sc de test de la console synchrone qui lance la fonction ConsoleDriverTest que l’on a ajouté
-            if (argc == 1)
-                    ConsoleDriverTest(NULL, NULL);
-                else
+            #ifdef CHANGED
+                else if(!strcmp (*argv, "-sc"))
                   {
-                      ASSERT_MSG (argc > 2, "-sc needs two file names\n");
-                      ConsoleDriverTest (*(argv + 1), *(argv + 2));
-                      argCount = 3;
+                    /// une option -sc de test de la console synchrone qui lance la fonction ConsoleDriverTest que l’on a ajouté
+                    if (argc == 1)
+                              ConsoleDriverTest(NULL, NULL);
+                    else
+                    {
+                       ASSERT_MSG (argc > 2, "-sc needs two file names\n");
+                        ConsoleDriverTest (*(argv + 1), *(argv + 2));
+                       argCount = 3;
+                    }
                   }
-          }
+          #endif //CHANGED
           else if (!strcmp (*argv, "-c"))
             {                        // test the console
                 if (argc == 1)
@@ -145,17 +147,6 @@ main (int argc, char **argv)
                   {
                       ASSERT_MSG (argc > 2, "-c needs two file names\n");
                       ConsoleTest (*(argv + 1), *(argv + 2));
-                      argCount = 3;
-                  }
-            }
-            else if (!strcmp (*argv, "-sc"))
-            {                        // test the console
-                if (argc == 1)
-                    ConsoleDriverTest (NULL, NULL);
-                else
-                  {
-                      ASSERT_MSG (argc > 2, "-c needs two file names\n");
-                      ConsoleDriverTest (*(argv + 1), *(argv + 2));
                       argCount = 3;
                   }
             }

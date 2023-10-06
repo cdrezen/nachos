@@ -3,6 +3,9 @@
 #include "system.h"
 #include "consoledriver.h"
 #include "synch.h"
+#include "translate.h"
+
+
 
 
 static Semaphore *readAvail;
@@ -31,22 +34,41 @@ void ConsoleDriver::PutChar(int ch)
     writeDone->P ();        // wait for write to finish
 }
 
-int ConsoleDriver::GetChar()
+char ConsoleDriver::GetChar()
 {
 
  readAvail->P ();        // wait for character to arrive
- char ch = console->RX ();
+ char ch = console->RX();
  return ch;
 }
 
 void ConsoleDriver::PutString(const char *s)
 {
-// ...
+    for (int i = 0; s+1 != NULL; i++){
+        PutChar(*(s+i));
+    }
 }
 
 void ConsoleDriver::GetString(char *s, int n)
 {
-// ...
+    for(int i = 0; i < n; i++) s[i] = GetChar();
 }
+
+unsigned ConsoleDriver::copyStringFromMachine(int from, char *to, unsigned size){
+    int p;
+    unsigned int i = 0;
+    for(; i < size; i++){
+        machine->ReadMem(from, 1, &p);
+        if(p == '\0'){
+            to[i] = p;
+        }
+        else{
+            to[i+1] = '\0';
+            break;
+        }
+    }
+    return true;
+}
+
 
 #endif // CHANGED
