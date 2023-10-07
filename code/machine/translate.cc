@@ -292,48 +292,12 @@ Machine::Translate(int virtAddr, int *physAddr, int size, bool writing, bool deb
 }
 
 #ifdef CHANGED
-/*
 bool Machine::copyStringToMachine(int to_ptr, char *buf, unsigned size)
 {
-    //on cherche \n
-    unsigned char *entre_ptr = (unsigned char *)memchr((void *)buf, '\n', size);
-    if (entre_ptr != NULL) size = ++entre_ptr - (unsigned char *)buf;
-
-    if (size <= sizeof(int) && size != 3)
-    {
-        if (!WriteMem(to_ptr, size, (int)buf)) return false;
-    }
-    else
-    {
-        for(int i = 0; i < size;)//on ecrit 4 bytes par 4 bytes max ou 1 puis 2 si 3 bytes
-        {
-             int tmp_size = i + sizeof(int ) > size ? sizeof(int) : size - i;
-
-             if(tmp_size == 3) tmp_size--; // on ne peut pas ecrire 3 octets
-
-             if (!WriteMem(to_ptr+i, tmp_size, (int)(buf+i))) return false;
-
-             i += tmp_size;
-        }
-    }
-
-    // on rajoutte la terminaison du string
-    if (!WriteMem(to_ptr+size, 1, '\0')) return false;
-
-    return true;
-}
-*/
-bool Machine::copyStringToMachine(int to_ptr, char *buf, unsigned size)
-{
-    /*à mettre dans GetString
-    //on cherche \n
-    unsigned char *entre_ptr = (unsigned char *)memchr((void *)buf, '\n', size);
-    if (entre_ptr != NULL) size = ++entre_ptr - (unsigned char *)buf;
-    */
-
-    for (int i = 0; i < size && buf[i] != '\0'; i++) // on ecrit 1 byte à la fois
+    for (int i = 0; i < size; i++) // on ecrit 1 byte à la fois
     {
         if (!WriteMem(to_ptr + i, 1, (int)buf[i])) return false;
+        if(buf[i] == '\0') return true;
     }
 
     // on rajoute la terminaison du string

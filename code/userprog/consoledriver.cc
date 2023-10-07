@@ -73,9 +73,8 @@ void ConsoleDriver::GetString(char *s, int n)
 
     for(int i = 0; i < n; i++)
     {
-        char c = GetChar();
-        if(c == '\n' || c == '\0') break;
-        s[i] = c;
+        s[i] = GetChar();
+        if (s[i] == '\n' || s[i] == '\0') break;
     }
 
     stringIO->V();
