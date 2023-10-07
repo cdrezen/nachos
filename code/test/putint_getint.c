@@ -2,6 +2,6 @@
 
 int main()
 {
-    PutInt(1999999999);
+    PutInt(199999999);
     Halt();
 }
