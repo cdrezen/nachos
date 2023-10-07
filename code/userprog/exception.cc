@@ -131,9 +131,8 @@ ExceptionHandler (ExceptionType which)
                       printf("PutInt\n");
                       int val = machine->ReadRegister(4);
                       char buf[10];// 10: taille max d'un int représenté dans un string
-                      int size = snprintf(buf, 10, "%d");
-                      printf("%s", buf);
-                      buf[size] = NULL;
+                      int size = snprintf(buf, 10, "%d", val);
+                      //buf[size] = NULL;
                       consoledriver->PutString(buf);
 
                       break;
