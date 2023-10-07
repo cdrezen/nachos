@@ -23,7 +23,11 @@
 #include "progtest.h"
 #endif
 
+#ifndef __APPLE__
 #include <malloc.h>
+#else
+#include "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/Kernel.framework/Versions/A/Headers/sys/malloc.h"
+#endif
 
 
 // External functions used by this file
