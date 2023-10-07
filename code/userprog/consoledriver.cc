@@ -10,6 +10,7 @@
 
 static Semaphore *readAvail;
 static Semaphore *writeDone;
+static Semaphore *stringIO;
 
 static void ReadAvailHandler(void *arg) { (void) arg; readAvail->V(); }
 static void WriteDoneHandler(void *arg) { (void) arg; writeDone->V(); }
@@ -18,6 +19,8 @@ ConsoleDriver::ConsoleDriver(const char *in, const char *out)
 {
     readAvail = new Semaphore("read avail", 0);
     writeDone = new Semaphore("write done", 0);
+    stringIO = new Semaphore("string operation", 0);//VII au cas où plusieurs thread veuillent lire ou ecrire en meme temps
+
     console = new Console (in, out, ReadAvailHandler, WriteDoneHandler, NULL);
 }
 
@@ -42,16 +45,30 @@ char ConsoleDriver::GetChar()
  return ch;
 }
 
+//VII.4
+void ConsoleDriver::PutInt(int i)
+{
+
+}
+
+int  ConsoleDriver::GetInt();
+
 void ConsoleDriver::PutString(const char *s)
 {
+    stringIO->P();
+
     for (int i = 0; s+1 != NULL; i++){
         PutChar(*(s+i));
     }
+
+    stringIO->V();
 }
 
 void ConsoleDriver::GetString(char *s, int n)
 {
+    stringIO->P();
     for(int i = 0; i < n; i++) s[i] = GetChar();
+    stringIO->V();
 }
 
 unsigned ConsoleDriver::copyStringFromMachine(int from, char *to, unsigned size){

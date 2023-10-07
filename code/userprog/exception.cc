@@ -83,7 +83,6 @@ ExceptionHandler (ExceptionType which)
                     break;
                   }
 
-                #ifdef CHANGED
                 case SC_PutChar:
                   {
                     DEBUG('s',"PutChar\n");
@@ -96,36 +95,61 @@ ExceptionHandler (ExceptionType which)
                     break;
                   }
                 case SC_PutString:
-                {
-                  break;
-                }
-                case SC_GetString:
-                {
-                  printf("GetString\n");
-                  int to = machine->ReadRegister(4);
-                  int size = machine->ReadRegister(5);
-
-                  if(size > MAX_STRING_SIZE) size = MAX_STRING_SIZE;
-
-                  char* buf = new char[size];
-                  consoledriver->GetString(buf, size);
-
-                  for(int i = 0; i < size; i++)
                   {
-                    char c = buf[i];
-                    if(c == '\n' || c == '\0')
+                    break;
+                  }
+                case SC_GetString:
+                  {
+                    printf("GetString\n");
+                    int to = machine->ReadRegister(4);
+                    int size = machine->ReadRegister(5);
+
+                    printf("sz=%d\n", size);
+
+                    if(size > MAX_STRING_SIZE) size = MAX_STRING_SIZE;
+
+                    char* buf = new char[size];
+                    consoledriver->GetString(buf, size);
+
+                    for(int i = 0; i < size; i++)
                     {
-                      size = i;
+                      char c = buf[i];
+                      if(c == '\n' || c == '\0')
+                      {
+                        size = i;
+                        break;
+                      }
+                    }
+
+                    machine->copyStringToMachine(to, buf, size);
+                    delete[] buf;
+                  
+                    break;
+                  }
+                  case SC_PutInt:
+                    {
+                      printf("PutInt\n");
+                      int val = machine->ReadRegister(4);
+                      char buf[10];// 10: taille max d'un int représenté dans un string
+                      int size = snprintf(buf, 10, "%d");
+                      consoledriver->PutString(buf);
+
                       break;
                     }
-                  }
+                  case SC_GetInt:
+                    {
+                      printf("GetInt\n");
+                      int ptr = machine->ReadRegister(4);
+                      int res = 0;
 
-                  machine->copyStringToMachine(to, buf, size);
-                  delete[] buf;
-                  
-                  break;
-                }
-                #endif
+                      char buf[10];
+                      consoledriver->GetString(buf, 10);
+
+                      if(!sscanf(buf, "%d", &res)) break;
+
+                      machine->WriteMem(ptr, sizeof(int), res);
+                      break;
+                    }
                 
                 default:
                   {

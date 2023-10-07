@@ -34,12 +34,15 @@
 
 #ifdef CHANGED
     //Action IV.2.
-    #define SC_PutChar  11
+    #define SC_PutChar      11
     //VII
-    #define SC_GetChar  12
+    #define SC_GetChar      12
 
-    #define SC_PutString 13
-    #define SC_GetString  14
+    #define SC_PutString    13
+    #define SC_GetString    14
+    
+    #define SC_PutInt       15
+    #define SC_GetInt       16
 #endif
 
 #ifdef IN_USER_MODE
@@ -142,7 +145,14 @@ void Yield (void);
 
 //Action IV.2.
 void PutChar(char c);
+char GetChar();
+
+//V & VII
 void GetString(char *s, int n);
+
+//VII.4
+void PutInt(int i);
+void GetInt(int* n);
 
 #endif // IN_USER_MODE
 
