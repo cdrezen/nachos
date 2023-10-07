@@ -110,8 +110,6 @@ ExceptionHandler (ExceptionType which)
 
                     char* buf = new char[size];
                     consoledriver->GetString(buf, size);
-
-                    printf("sz=%d\n", size);
                     
                     /*/facon de recuperer la nouvelle taille sans modif la signature de consoledriver->GetString
                     int i = 0;
