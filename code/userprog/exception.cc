@@ -122,7 +122,7 @@ ExceptionHandler (ExceptionType which)
 
                   machine->copyStringToMachine(to, buf, size);
                   delete[] buf;
-
+                  
                   break;
                 }
                 #endif
