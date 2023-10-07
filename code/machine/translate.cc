@@ -331,7 +331,7 @@ bool Machine::copyStringToMachine(int to_ptr, char *buf, unsigned size)
     if (entre_ptr != NULL) size = ++entre_ptr - (unsigned char *)buf;
     */
 
-    for (int i = 0; i < size; i++) // on ecrit 1 byte à la fois
+    for (int i = 0; i < size && buf[i] != '\0'; i++) // on ecrit 1 byte à la fois
     {
         if (!WriteMem(to_ptr + i, 1, (int)buf[i])) return false;
     }

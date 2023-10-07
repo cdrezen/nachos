@@ -60,7 +60,7 @@ void ConsoleDriver::PutString(const char *s)
 {
     stringIO->P();
 
-    for (int i = 0; s+1 != NULL; i++){
+    for (int i = 0; *(s+1) != NULL; i++){
         PutChar(*(s+i));
     }
 
@@ -70,7 +70,14 @@ void ConsoleDriver::PutString(const char *s)
 void ConsoleDriver::GetString(char *s, int n)
 {
     stringIO->P();
-    for(int i = 0; i < n; i++) s[i] = GetChar();
+
+    for(int i = 0; i < n; i++)
+    {
+        char c = GetChar();
+        if(c == '\n' || c == '\0') break;
+        s[i] = c;
+    }
+
     stringIO->V();
 }
 
