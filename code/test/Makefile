@@ -66,6 +66,7 @@ CFLAGS	:=	-G 0 -DIN_USER_MODE $(INCDIR) -Wall -O2 -DCHANGED
 SOURCES	:=	$(wildcard *.c)
 PROGS	:=	$(patsubst %.c,%,$(SOURCES))
 PROGS	:=	$(filter-out vsprintf.*,$(PROGS))#######
+$(info    PROGS:=$(PROGS))##########
 
 # We don't support native builds
 ifeq ($(GCCDIR),)
