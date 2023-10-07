@@ -51,7 +51,7 @@ void ConsoleDriver::PutInt(int i)
 
 }
 
-int  ConsoleDriver::GetInt();
+void  ConsoleDriver::GetInt(int ptr);
 
 void ConsoleDriver::PutString(const char *s)
 {

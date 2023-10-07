@@ -16,7 +16,7 @@ void GetString(char *s, int n); // Behaves like fgets(3S)
 
 //VII.4
 void PutInt(int i);
-void GetInt(int* n);
+void GetInt(int ptr);
 
 unsigned copyStringFromMachine(int from, char *to, unsigned size);
 
