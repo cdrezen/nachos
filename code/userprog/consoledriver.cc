@@ -19,7 +19,7 @@ ConsoleDriver::ConsoleDriver(const char *in, const char *out)
 {
     readAvail = new Semaphore("read avail", 0);
     writeDone = new Semaphore("write done", 0);
-    stringIO = new Semaphore("string operation", 0);//VII au cas où plusieurs thread veuillent lire ou ecrire en meme temps
+    stringIO = new Semaphore("string operation", 1);//VII au cas où plusieurs thread veuillent lire ou ecrire en meme temps
 
     console = new Console (in, out, ReadAvailHandler, WriteDoneHandler, NULL);
 }
