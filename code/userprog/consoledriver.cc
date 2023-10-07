@@ -60,7 +60,7 @@ void ConsoleDriver::PutString(const char *s)
 {
     stringIO->P();
 
-    for (int i = 0; *(s+1) != NULL; i++){
+    for (int i = 0; *(s+i) != NULL; i++){
         PutChar(*(s+i));
     }
 
