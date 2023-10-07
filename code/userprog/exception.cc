@@ -110,13 +110,15 @@ ExceptionHandler (ExceptionType which)
 
                     char* buf = new char[size];
                     consoledriver->GetString(buf, size);
+
+                    printf("sz=%d\n", size);
                     
                     //facon de recuperer la nouvelle taille sans modif la signature de consoledriver->GetString
                     int i = 0;
                     for(i; i < size && buf[i] != '\0'; i++);
                     size = i;
                     //
-                    
+
                     machine->copyStringToMachine(to, buf, size);
                     delete[] buf;
                   
