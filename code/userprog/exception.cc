@@ -30,16 +30,15 @@
 // the user program immediately after the "syscall" instruction.
 //----------------------------------------------------------------------
 static void
-UpdatePC ()
+UpdatePC()
 {
-    int pc = machine->ReadRegister (PCReg);
-    machine->WriteRegister (PrevPCReg, pc);
-    pc = machine->ReadRegister (NextPCReg);
-    machine->WriteRegister (PCReg, pc);
-    pc += 4;
-    machine->WriteRegister (NextPCReg, pc);
+  int pc = machine->ReadRegister(PCReg);
+  machine->WriteRegister(PrevPCReg, pc);
+  pc = machine->ReadRegister(NextPCReg);
+  machine->WriteRegister(PCReg, pc);
+  pc += 4;
+  machine->WriteRegister(NextPCReg, pc);
 }
-
 
 //----------------------------------------------------------------------
 // ExceptionHandler
@@ -64,139 +63,153 @@ UpdatePC ()
 //      are in machine.h.
 //----------------------------------------------------------------------
 
-void
-ExceptionHandler (ExceptionType which)
+void ExceptionHandler(ExceptionType which)
 {
-    int type = machine->ReadRegister (2);
-    int address = machine->ReadRegister (BadVAddrReg);
+  int type = machine->ReadRegister(2);
+  int address = machine->ReadRegister(BadVAddrReg);
 
-    switch (which)
-      {
-        case SyscallException:
-          {
-            switch (type)
-              {
-                case SC_Halt:
-                  {
-                    DEBUG ('s', "Shutdown, initiated by user program.\n");
-                    interrupt->Powerdown ();
-                    break;
-                  }
+  switch (which)
+  {
+  case SyscallException:
+  {
+    switch (type)
+    {
+    case SC_Halt:
+    {
+      DEBUG('s', "Shutdown, initiated by user program.\n");
+      interrupt->Powerdown();
+      break;
+    }
 
-                case SC_PutChar:
-                  {
-                    DEBUG('s',"PutChar\n");
-                    consoledriver->PutChar(machine->ReadRegister(4));
-                    break;
-                  }
-                case SC_GetChar:
-                  {
-                    machine->WriteRegister(2, consoledriver->GetChar());
-                    break;
-                  }
-                case SC_PutString:
-                  {
-                    break;
-                  }
-                case SC_GetString:
-                  {
-                    printf("GetString\n");
-                    int to = machine->ReadRegister(4);
-                    int size = machine->ReadRegister(5);
+    case SC_PutChar:
+    {
+      DEBUG('s', "PutChar\n");
+      consoledriver->PutChar(machine->ReadRegister(4));
+      break;
+    }
+    case SC_GetChar:
+    {
+      machine->WriteRegister(2, consoledriver->GetChar());
+      break;
+    }
+    case SC_PutString:
+    {
 
-                    printf("sz=%d\n", size);
+      //Initialisation des paramètres de copyStringFromMachine
+      int from = machine->ReadRegister(4);
+      int size = MAX_STRING_SIZE;
+      char *to = new char[size];
 
-                    if(size > MAX_STRING_SIZE) size = MAX_STRING_SIZE;
+      consoledriver->copyStringFromMachine(from, to, size);
+      consoledriver->PutString(to);
 
-                    char* buf = new char[size];
-                    consoledriver->GetString(buf, size);
-                    
-                    /*/facon de recuperer la nouvelle taille sans modif la signature de consoledriver->GetString
-                    int i = 0;
-                    for(i; i < size && buf[i] != '\0'; i++);
-                    size = i;
-                    /*/
+      delete[] to;
+      break;
+    }
+    case SC_GetString:
+    {
+      printf("GetString\n");
+      int to = machine->ReadRegister(4);
+      int size = machine->ReadRegister(5);
 
-                    machine->copyStringToMachine(to, buf, size);
-                    delete[] buf;
-                  
-                    break;
-                  }
-                  case SC_PutInt:
-                    {
-                      printf("PutInt\n");
-                      int val = machine->ReadRegister(4);
-                      char buf[10];// 10: taille max d'un int représenté dans un string
-                      int size = snprintf(buf, 10, "%d", val);
-                      buf[size] = NULL;
-                      consoledriver->PutString(buf);
+      printf("sz=%d\n", size);
 
-                      break;
-                    }
-                  case SC_GetInt:
-                    {
-                      printf("GetInt\n");
-                      int ptr = machine->ReadRegister(4);
-                      int res = 0;
+      if (size > MAX_STRING_SIZE)
+        size = MAX_STRING_SIZE;
 
-                      char buf[10];
-                      consoledriver->GetString(buf, 10);
+      char *buf = new char[size];
+      consoledriver->GetString(buf, size);
 
-                      if(!sscanf(buf, "%d", &res)) break;
+      /*/facon de recuperer la nouvelle taille sans modif la signature de consoledriver->GetString
+      int i = 0;
+      for(i; i < size && buf[i] != '\0'; i++);
+      size = i;
+      /*/
 
-                      machine->WriteMem(ptr, sizeof(int), res);
-                      break;
-                    }
-                
-                default:
-                  {
-                    ASSERT_MSG(FALSE, "Unimplemented system call %d\n", type);
-                  }
-              }
+      machine->copyStringToMachine(to, buf, size);
+      delete[] buf;
 
-            // Do not forget to increment the pc before returning!
-            // This skips over the syscall instruction, to continue execution
-            // with the rest of the program
-            UpdatePC ();
-            break;
-          }
+      break;
+    }
+    case SC_PutInt:
+    {
+      printf("PutInt\n");
+      int val = machine->ReadRegister(4);
+      char buf[10]; // 10: taille max d'un int représenté dans un string
+      int size = snprintf(buf, 10, "%d", val);
+      buf[size] = NULL;
+      consoledriver->PutString(buf);
 
-        case PageFaultException:
-          if (!address) {
-            ASSERT_MSG (FALSE, "NULL dereference at PC %x!\n", machine->registers[PCReg]);
-          } else {
-            // For now
-            ASSERT_MSG (FALSE, "Page Fault at address %x at PC %x\n", address, machine->registers[PCReg]);
-          }
-          break;
+      break;
+    }
+    case SC_GetInt:
+    {
+      printf("GetInt\n");
+      int ptr = machine->ReadRegister(4);
+      int res = 0;
 
-        case ReadOnlyException:
-          // For now
-          ASSERT_MSG (FALSE, "Read-Only at address %x at PC %x\n", address, machine->registers[PCReg]);
-          break;
+      char buf[10];
+      consoledriver->GetString(buf, 10);
 
-        case BusErrorException:
-          // For now
-          ASSERT_MSG (FALSE, "Invalid physical address at address %x at PC %x\n", address, machine->registers[PCReg]);
-          break;
+      if (!sscanf(buf, "%d", &res))
+        break;
 
-        case AddressErrorException:
-          // For now
-          ASSERT_MSG (FALSE, "Invalid address %x at PC %x\n", address, machine->registers[PCReg]);
-          break;
+      machine->WriteMem(ptr, sizeof(int), res);
+      break;
+    }
 
-        case OverflowException:
-          // For now
-          ASSERT_MSG (FALSE, "Overflow at PC %x\n", machine->registers[PCReg]);
-          break;
+    default:
+    {
+      ASSERT_MSG(FALSE, "Unimplemented system call %d\n", type);
+    }
+    }
 
-        case IllegalInstrException:
-          // For now
-          ASSERT_MSG (FALSE, "Illegal instruction at PC %x\n", machine->registers[PCReg]);
-          break;
+    // Do not forget to increment the pc before returning!
+    // This skips over the syscall instruction, to continue execution
+    // with the rest of the program
+    UpdatePC();
+    break;
+  }
 
-        default:
-          ASSERT_MSG (FALSE, "Unexpected user mode exception %d %d %x at PC %x\n", which, type, address, machine->registers[PCReg]);
-          break;
-      }
+  case PageFaultException:
+    if (!address)
+    {
+      ASSERT_MSG(FALSE, "NULL dereference at PC %x!\n", machine->registers[PCReg]);
+    }
+    else
+    {
+      // For now
+      ASSERT_MSG(FALSE, "Page Fault at address %x at PC %x\n", address, machine->registers[PCReg]);
+    }
+    break;
+
+  case ReadOnlyException:
+    // For now
+    ASSERT_MSG(FALSE, "Read-Only at address %x at PC %x\n", address, machine->registers[PCReg]);
+    break;
+
+  case BusErrorException:
+    // For now
+    ASSERT_MSG(FALSE, "Invalid physical address at address %x at PC %x\n", address, machine->registers[PCReg]);
+    break;
+
+  case AddressErrorException:
+    // For now
+    ASSERT_MSG(FALSE, "Invalid address %x at PC %x\n", address, machine->registers[PCReg]);
+    break;
+
+  case OverflowException:
+    // For now
+    ASSERT_MSG(FALSE, "Overflow at PC %x\n", machine->registers[PCReg]);
+    break;
+
+  case IllegalInstrException:
+    // For now
+    ASSERT_MSG(FALSE, "Illegal instruction at PC %x\n", machine->registers[PCReg]);
+    break;
+
+  default:
+    ASSERT_MSG(FALSE, "Unexpected user mode exception %d %d %x at PC %x\n", which, type, address, machine->registers[PCReg]);
+    break;
+  }
 }
