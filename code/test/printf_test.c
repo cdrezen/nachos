@@ -16,14 +16,15 @@ void monprintf(char* fmt, ...)
 
     if(!i) return;//echec
 
-    //PutString(bptr, i);
+    PutString(bptr, i);
 
+    /*
 	while((ch = *(bptr++)) != 0) {
 		if(ch == '\n')
 			PutChar('\r');
 
 		PutChar(ch);
-	}
+	}*/
 
 	va_end(args);
 }
