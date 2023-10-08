@@ -82,10 +82,13 @@ void ExceptionHandler(ExceptionType which)
     }
     case SC_Exit://partie VI
     {
-      char str[31];
-      int res = machine->ReadRegister(7);
-      //machine->ReadMem(res, sizeof(int), &res);
-      snprintf(str, 31, "programme termine, retour=%d.\n", res);
+      char str[100];
+      int res = machine->ReadRegister(8);
+      int res1= machine->ReadRegister(1);
+      machine->ReadMem(res1, sizeof(int), &res1);
+      int res2= 0;
+      machine->ReadMem(address, sizeof(int), &res2);
+      snprintf(str, 100, "programme termine, retour=%d %d %d.\n", res, res1, res2);
       consoledriver->PutString(str);
       interrupt->Powerdown();
       break;
