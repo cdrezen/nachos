@@ -85,7 +85,6 @@ void ExceptionHandler(ExceptionType which)
       char str[100];
       int res = machine->ReadRegister(8);
       int res1= machine->ReadRegister(1);
-      machine->ReadMem(res1, sizeof(int), &res1);
       int res2= 0;
       machine->ReadMem(address, sizeof(int), &res2);
       snprintf(str, 100, "programme termine, retour=%d %d %d.\n", res, res1, res2);
