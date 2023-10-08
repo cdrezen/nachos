@@ -2,6 +2,6 @@
 
 int main()
 {
-    PutString("test", 4);
+    PutString("test");//, 4);
     Halt();
 }
