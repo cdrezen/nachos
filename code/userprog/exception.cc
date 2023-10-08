@@ -80,7 +80,7 @@ void ExceptionHandler(ExceptionType which)
       interrupt->Powerdown();
       break;
     }
-    case SC_Exit://partie VI
+    case SC_Exit: // partie VI
     {
       char str[51];
       int exit = machine->ReadRegister(2);
@@ -104,7 +104,7 @@ void ExceptionHandler(ExceptionType which)
     case SC_PutString:
     {
 
-      //Initialisation des paramètres de copyStringFromMachine
+      // Initialisation des paramètres de copyStringFromMachine
       int from = machine->ReadRegister(4);
       int size = MAX_STRING_SIZE;
       char *to = new char[size];
@@ -117,13 +117,13 @@ void ExceptionHandler(ExceptionType which)
     }
     case SC_GetString:
     {
-      printf("GetString\n");
-      int to = machine->ReadRegister(4);
-      int size = machine->ReadRegister(5);
+      DEBUG('s', "GetString\n");
+      int to = machine->ReadRegister(4);   // arg0
+      int size = machine->ReadRegister(5); // arg1
 
-      printf("sz=%d\n", size);
+      DEBUG('s', "sz=%d\n", size);
 
-      if (size > MAX_STRING_SIZE)
+      if (size > MAX_STRING_SIZE) // pas de dépacements de la taille autorisée
         size = MAX_STRING_SIZE;
 
       char *buf = new char[size];
@@ -142,11 +142,12 @@ void ExceptionHandler(ExceptionType which)
     }
     case SC_PutInt:
     {
-      printf("PutInt\n");
+      DEBUG('s', "PutInt\n");
       int val = machine->ReadRegister(4);
-      char buf[10]; // 10: taille max d'un int représenté dans un string
-      int size = snprintf(buf, 10, "%d", val);
-      if(!size) break;
+      char buf[11]; // 11: taille max d'un int signé représenté dans un string
+      int size = snprintf(buf, 11, "%d", val);
+      if (!size)
+        break;
       buf[size] = NULL;
       consoledriver->PutString(buf);
 
@@ -154,12 +155,12 @@ void ExceptionHandler(ExceptionType which)
     }
     case SC_GetInt:
     {
-      printf("GetInt\n");
+      DEBUG('s', "GetInt\n");
       int ptr = machine->ReadRegister(4);
       int res = 0;
 
-      char buf[10];
-      consoledriver->GetString(buf, 10);
+      char buf[11]; // 11: taille max d'un int signé (incluant le char '-' ) représenté dans un string
+      consoledriver->GetString(buf, 11);
 
       if (!sscanf(buf, "%d", &res))
         break;

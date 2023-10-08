@@ -292,17 +292,17 @@ Machine::Translate(int virtAddr, int *physAddr, int size, bool writing, bool deb
 }
 
 #ifdef CHANGED
-bool Machine::copyStringToMachine(int to_ptr, char *buf, unsigned size)
+unsigned Machine::copyStringToMachine(int to_ptr, char *buf, unsigned size)
 {
     for (int i = 0; i < size; i++) // on ecrit 1 byte à la fois
     {
-        if (!WriteMem(to_ptr + i, 1, (int)buf[i])) return false;
-        if(buf[i] == '\0') return true;
+        if (!WriteMem(to_ptr + i, 1, (int)buf[i])) return -1;
+        if(buf[i] == '\0') return i + 1;
     }
 
     // on rajoute la terminaison du string
-    if (!WriteMem(to_ptr + size, 1, '\0')) return false;
+    if (!WriteMem(to_ptr + size, 1, '\0')) return -1;
 
-    return true;
+    return size;
 }
 #endif

@@ -45,17 +45,6 @@ char ConsoleDriver::GetChar()
  return ch;
 }
 
-//VII.4
-void ConsoleDriver::PutInt(int i)
-{
-
-}
-
-void  ConsoleDriver::GetInt(int ptr)
-{
-
-}
-
 void ConsoleDriver::PutString(const char *s)
 {
     stringIO->P();
@@ -73,7 +62,7 @@ void ConsoleDriver::GetString(char *s, int n)
     for(int i = 0; i < n; i++)
     {
         s[i] = GetChar();
-        if (s[i] == '\n' || s[i] == '\0') { break; }
+        if (s[i] == '\n' || s[i] == '\0') { break; }//nouvelle ligne ou fin de string ?
     }
 
     stringIO->V();

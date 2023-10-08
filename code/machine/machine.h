@@ -144,7 +144,7 @@ class Machine:public dontcopythis {
                                 // translation couldn't be completed.
 
     #ifdef CHANGED
-    bool copyStringToMachine(int to_ptr, char *buf, unsigned size);
+    unsigned copyStringToMachine(int to_ptr, char *buf, unsigned size);
     #endif //CHANGED
 
     void RaiseException(ExceptionType which, int badVAddr);
