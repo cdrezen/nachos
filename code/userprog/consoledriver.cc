@@ -82,19 +82,14 @@ void ConsoleDriver::GetString(char *s, int n)
 
 unsigned ConsoleDriver::copyStringFromMachine(int from, char *to, unsigned size){
     int p;
-    unsigned int i = 0;
-    for(; i < size; i++){
-        machine->ReadMem(from, 1, &p);
-        if(p == '\0'){
-            to[i] = p;
+    unsigned int i;
+    for(i = 0; i < size && machine->ReadMem(from+i, 1, &p); i++){
+        //On caste car ReadMem demande en argument un int et to un char
+            to[i+i] = (char)p; 
         }
-        else{
-            to[i+1] = '\0';
-            break;
-        }
+        to[i+1] = '\0';
+        return true;
     }
-    return true;
-}
 
 
 #endif // CHANGED
