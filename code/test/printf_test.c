@@ -6,10 +6,11 @@ char ppbuf[1024];
 void monprintf(char* fmt, ...)
 {
     va_list args;
+    int res_sz;
 
 	va_start(args, fmt);
 
-	int res_sz = vsprintf(ppbuf, fmt, args);
+	res_sz = vsprintf(ppbuf, fmt, args);
 
     if(!res_sz) return;//echec
 
