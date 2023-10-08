@@ -30,6 +30,6 @@ void monprintf(char* fmt, ...)
 
 int main()
 {
-    monprintf("blabla %d trucs sont %s. mon char est %c hex: %x", 3, "machin", (char)127, (char)127);
+    monprintf("blabla %d trucs sont %s. mon char est %c hex: 0x%x\n", 3, "machin", '*', '*');
     Halt();
 }
