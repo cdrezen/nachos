@@ -72,7 +72,7 @@ Halt:
         .globl Exit
         .ent   Exit
 Exit:
-        move $4, $2
+        move $4, $2  # pour recuperer la valeur de retour depuis le registre 2 en la plancant dans le 4 (car le 2 est reecrit)
         addiu $2,$0,SC_Exit
         syscall
         j        $31
