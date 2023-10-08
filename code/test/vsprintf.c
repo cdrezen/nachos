@@ -395,3 +395,20 @@ int sprintf(char * buf, const char *fmt, ...)
 	va_end(args);
 	return i;
 }
+
+void monprintf(char* fmt, ...)
+{
+    va_list args;
+	char ppbuf[256];
+    int res_sz;
+
+	va_start(args, fmt);
+
+	res_sz = vsprintf(ppbuf, fmt, args);
+
+    if(!res_sz) return;//echec
+
+    PutString(ppbuf);//, res_sz);
+
+	va_end(args);
+}
