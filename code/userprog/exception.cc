@@ -84,7 +84,7 @@ void ExceptionHandler(ExceptionType which)
     {
       char str[31];
       int res = machine->ReadRegister(4);
-      machine->ReadMem(res, sizeof(int), &res);
+      //machine->ReadMem(res, sizeof(int), &res);
       snprintf(str, 31, "programme termine, retour=%d.\n", res);
       consoledriver->PutString(str);
       interrupt->Powerdown();
