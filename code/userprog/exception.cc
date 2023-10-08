@@ -86,6 +86,7 @@ void ExceptionHandler(ExceptionType which)
       int res = machine->ReadRegister(2);
       snprintf(str, 31, "programme termine, retour=%d.\n", res);
       consoledriver->PutString(str);
+      interrupt->Enable();
       interrupt->Idle();
       break;
     }
