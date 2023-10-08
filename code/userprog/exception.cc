@@ -80,7 +80,13 @@ void ExceptionHandler(ExceptionType which)
       interrupt->Powerdown();
       break;
     }
-
+    case SC_Exit://partie VI
+    {
+      char str[31];
+      snprintf(str, 31, "programme termine, retour=%d.\n", machine->ReadRegister(2));
+      consoledriver->PutString(str);
+      break;
+    }
     case SC_PutChar:
     {
       DEBUG('s', "PutChar\n");
@@ -137,6 +143,7 @@ void ExceptionHandler(ExceptionType which)
       int val = machine->ReadRegister(4);
       char buf[10]; // 10: taille max d'un int représenté dans un string
       int size = snprintf(buf, 10, "%d", val);
+      if(!size) break;
       buf[size] = NULL;
       consoledriver->PutString(buf);
 
