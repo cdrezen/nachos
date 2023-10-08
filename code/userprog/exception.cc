@@ -83,10 +83,10 @@ void ExceptionHandler(ExceptionType which)
     case SC_Exit://partie VI
     {
       char str[31];
-      int res = machine->ReadRegister(2);
+      int res = machine->ReadRegister(4);
       snprintf(str, 31, "programme termine, retour=%d.\n", res);
       consoledriver->PutString(str);
-      interrupt->Enable();
+      interrupt->SetLevel(IntOff);
       interrupt->Idle();
       break;
     }
