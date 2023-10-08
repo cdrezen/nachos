@@ -83,7 +83,7 @@ void ExceptionHandler(ExceptionType which)
     case SC_Exit://partie VI
     {
       char str[43];
-      int res = machine->ReadRegister(0);//toujours 0 normalement d'après start.s
+      int res = machine->ReadRegister(4);//toujours 0 normalement d'après start.s
       snprintf(str, 43, "programme termine, exit code=%d.\n", res);
       consoledriver->PutString(str);
       interrupt->Powerdown();
