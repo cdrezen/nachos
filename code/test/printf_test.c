@@ -1,30 +1,19 @@
 #include "syscall.h"
 #include <stdarg.h>
 
-static char ppbuf[1024];
+char ppbuf[1024];
 
 void monprintf(char* fmt, ...)
 {
     va_list args;
-	char ch, *bptr;
-	int i;
 
 	va_start(args, fmt);
-	i = vsprintf(ppbuf, fmt, args);
 
-	bptr = ppbuf;
+	int res_sz = vsprintf(ppbuf, fmt, args);
 
-    if(!i) return;//echec
+    if(!res_sz) return;//echec
 
-    PutString(bptr, i);
-
-    /*
-	while((ch = *(bptr++)) != 0) {
-		if(ch == '\n')
-			PutChar('\r');
-
-		PutChar(ch);
-	}*/
+    PutString(ppbuf);//, res_sz);
 
 	va_end(args);
 }

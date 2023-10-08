@@ -148,6 +148,7 @@ void PutChar(char c);
 char GetChar();
 
 //V & VII
+void PutString(char *s);
 void GetString(char *s, int n);
 
 //VII.4
