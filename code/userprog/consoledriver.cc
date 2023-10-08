@@ -85,7 +85,7 @@ unsigned ConsoleDriver::copyStringFromMachine(int from, char *to, unsigned size)
     unsigned int i;
     for(i = 0; i < size && machine->ReadMem(from+i, 1, &p); i++){
         //On caste car ReadMem demande en argument un int et to un char
-            to[i+i] = (char)p; 
+            to[i] = (char)p; 
         }
         to[i+1] = '\0';
         return true;
