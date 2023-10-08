@@ -14,6 +14,8 @@ void monprintf(char* fmt, ...)
 
 	bptr = ppbuf;
 
+    if(!i) return;//echec
+
     //PutString(bptr, i);
 
 	while((ch = *(bptr++)) != 0) {
