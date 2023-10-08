@@ -1,7 +1,7 @@
 #include "syscall.h"
 #include <stdarg.h>
 
-char ppbuf[MAX_STRING_SIZE];
+char ppbuf[256];
 
 void monprintf(char* fmt, ...)
 {
