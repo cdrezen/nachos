@@ -2,9 +2,9 @@
 
 int main()
 {
-    char buf[300];
+    char buf[50];
     int i; // Déplacez la déclaration de i en dehors de la boucle
-    for(i = 0; i < 300; i++){
+    for(i = 0; i < 50; i++){
         buf[i] = 'a';
     }
     PutString(buf);

@@ -59,11 +59,10 @@ void  ConsoleDriver::GetInt(int ptr)
 void ConsoleDriver::PutString(const char *s)
 {
     stringIO->P();
-
-    for (int i = 0; *(s+i) != NULL; i++){
+    int i = 0;
+    for (i = 0; *(s+i) != NULL; i++){
         PutChar(*(s+i));
     }
-
     stringIO->V();
 }
 
@@ -86,8 +85,11 @@ unsigned ConsoleDriver::copyStringFromMachine(int from, char *to, unsigned size)
     for(i = 0; i < size && machine->ReadMem(from+i, 1, &p); i++){
         //On caste car ReadMem demande en argument un int et to un char
             to[i] = (char)p; 
+            if(to[i] == '\0'){
+                break;
+            }
         }
-        to[i+1] = '\0';
+        to[i] = '\0';
         return true;
     }
 
