@@ -7,6 +7,12 @@ int main()
     for(i = 0; i < 50; i++){
         buf[i] = 'a';
     }
+
     PutString(buf);
-    Halt();
+
+    char buf1[2000];
+    for(i = 0; i < 2000; i++){
+        buf1[i] = 'a';
+    }
+    PutString(buf1);
 }
