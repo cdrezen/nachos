@@ -7,9 +7,9 @@ int main()
 {
     int i = 0;
 
-    GetString(buf, 2000);
+    GetString(buf, 800);
 
-    for(i = 0; i < 2000; i++)
+    for(i = 0; i < 800; i++)
     {
         PutChar(buf[i]);
     }
