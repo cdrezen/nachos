@@ -108,9 +108,7 @@ void ExceptionHandler(ExceptionType which)
       int from = machine->ReadRegister(4);
       int size = MAX_STRING_SIZE;
       char *to = new char[size];
-      int res = 0;
-      int i = 0;
-      consoledriver->copyStringFromMachine(from, to, size);
+      machine->copyStringFromMachine(from, to, size);
       consoledriver->PutString(to);
 
       delete[] to;
