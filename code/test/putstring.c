@@ -1,5 +1,9 @@
 #include "syscall.h"
 
+#define TAILLE_BEAUCOUP_LIRE_ECRIRE 2000
+
+char bufbcp[TAILLE_BEAUCOUP_LIRE_ECRIRE];
+
 int main()
 {
     char buf[50];
@@ -12,8 +16,11 @@ int main()
 
     PutString(buf);
 
-    for(i = 0; i < 2000; i++){
-        //buf1[i] = 'a';
+    PutChar('\n');
+
+    for(i = 0; i < TAILLE_BEAUCOUP_LIRE_ECRIRE; i++){
+        bufbcp[i] = 'b';
     }
-    //PutString(buf1);
+
+    PutString(bufbcp);
 }
