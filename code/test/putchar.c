@@ -1,3 +1,4 @@
+//programme de test pour putchar, il doit écrire abcd et retourner 67 sans appel Halt
 #include "syscall.h"
 
 void print(char c, int n)

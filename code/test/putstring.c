@@ -1,3 +1,7 @@
+//programme de test de PutString
+//le programme effectue une ecriture dans la console de taille TAILLE_LIRE_ECRIRE puis de taille TAILLE_BEAUCOUP_LIRE_ECRIRE
+//cepandant il n'ecrira pas plus que MAX_STRING_SIZE
+
 #include "syscall.h"
 
 #define TAILLE_LIRE_ECRIRE 50
