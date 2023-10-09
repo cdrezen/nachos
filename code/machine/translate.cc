@@ -292,7 +292,7 @@ Machine::Translate(int virtAddr, int *physAddr, int size, bool writing, bool deb
 }
 
 #ifdef CHANGED
-unsigned ConsoleDriver::copyStringFromMachine(int from, char *to, unsigned size){
+unsigned Machine::copyStringFromMachine(int from, char *to, unsigned size){
     int p;
     unsigned int i;
     for(i = 0; i < size && machine->ReadMem(from+i, 1, &p); i++){
