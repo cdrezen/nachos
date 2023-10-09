@@ -146,7 +146,6 @@ class Machine:public dontcopythis {
     #ifdef CHANGED
     unsigned copyStringFromMachine(int from, char *to, unsigned size);
     unsigned copyStringToMachine(int to_ptr, char *buf, unsigned size);
-    unsigned copyStringFromMachine(int from, char *to, unsigned size);
 #endif // CHANGED
 
     void RaiseException(ExceptionType which, int badVAddr);
