@@ -299,11 +299,10 @@ unsigned Machine::copyStringFromMachine(int from, char *to, unsigned size){
         //On caste car ReadMem demande en argument un int et to un char
             to[i] = (char)p; 
             if(to[i] == '\0'){
-                break;
+                return 0;
             }
         }
-        to[i] = '\0';
-        return true;
+        return i;
     }
 
 unsigned Machine::copyStringToMachine(int to_ptr, char *buf, unsigned size)
@@ -319,18 +318,5 @@ unsigned Machine::copyStringToMachine(int to_ptr, char *buf, unsigned size)
 
     return size;
 }
-
-unsigned Machine::copyStringFromMachine(int from, char *to, unsigned size){
-    int p;
-    unsigned int i;
-    for(i = 0; i < size && machine->ReadMem(from+i, 1, &p); i++){
-        //On caste car ReadMem demande en argument un int et to un char
-            to[i] = (char)p; 
-            if(to[i] == '\0'){
-                return 0;
-            }
-        }
-        return i;
-    }
 
 #endif
