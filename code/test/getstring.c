@@ -1,18 +1,14 @@
 #include "syscall.h"
 
-//const int TAILLE_LIRE_ECRIRE = 10;
-char buf[2000];
+const int TAILLE_LIRE_ECRIRE = 10;
+const int TAILLE_BEAUCOUP_LIRE_ECRIRE = 2000;
+char buf[TAILLE_LIRE_ECRIRE];
+char bufbcp[TAILLE_BEAUCOUP_LIRE_ECRIRE];
 
 int main()
 {
-    int i = 0;
-
-    GetString(buf, 2000);
-
-    for(i = 0; i < 2000; i++)
-    {
-        PutChar(buf[i]);
-    }
-
-    Halt();
+    GetString(buf, TAILLE_LIRE_ECRIRE);
+    PutString(buf);
+    GetString(bufbcp, TAILLE_BEAUCOUP_LIRE_ECRIRE);
+    PutString(bufbcp);
 }
