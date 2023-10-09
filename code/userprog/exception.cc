@@ -205,7 +205,7 @@ void ExceptionHandler(ExceptionType which)
     // For now
     ASSERT_MSG(FALSE, "Read-Only at address %x at PC %x\n", address, machine->registers[PCReg]);
     break;
-
+ 
   case BusErrorException:
     // For now
     ASSERT_MSG(FALSE, "Invalid physical address at address %x at PC %x\n", address, machine->registers[PCReg]);
