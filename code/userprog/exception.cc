@@ -148,7 +148,11 @@ void ExceptionHandler(ExceptionType which)
       int size = snprintf(buf, 11, "%d", val);
       if (!size)
         break;
-      buf[size] = NULL;
+      
+      printf("sz=%d", size);
+
+      if(size > 11) buf[10] = NULL;
+      else buf[size -1] = NULL;
       consoledriver->PutString(buf);
 
       break;
