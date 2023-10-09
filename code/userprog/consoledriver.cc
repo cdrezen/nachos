@@ -49,7 +49,7 @@ void ConsoleDriver::PutString(const char *s)
 {
     stringIO->P();
     int i = 0;
-    for (i = 0; *(s+i) != NULL; i++){
+    for (i = 0; *(s+i) != NULL; i++){//on fait PutChar tant que s[i] n'est pas la terminaison de string
         PutChar(*(s+i));
     }
     stringIO->V();

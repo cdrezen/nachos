@@ -1,3 +1,5 @@
+//programme qui teste le uniquement le printf fait maison
+//il doit renvoyer "blabla 3 trucs sont machin. mon char est '*', hex: 0x2a."
 #include "syscall.h"
 
 int main()

@@ -54,7 +54,7 @@ extern PostOffice *postOffice;
 #ifdef USER_PROGRAM
 #include "consoledriver.h"
 extern ConsoleDriver *consoledriver;
-const int MAX_STRING_SIZE = 2560;
+const int MAX_STRING_SIZE = 256;
 #endif
 #endif
 
