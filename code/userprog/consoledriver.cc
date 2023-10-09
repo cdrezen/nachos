@@ -68,19 +68,6 @@ void ConsoleDriver::GetString(char *s, int n)
     stringIO->V();//fourchette disponible
 }
 
-unsigned ConsoleDriver::copyStringFromMachine(int from, char *to, unsigned size){
-    int p;
-    unsigned int i;
-    for(i = 0; i < size && machine->ReadMem(from+i, 1, &p); i++){
-        //On caste car ReadMem demande en argument un int et to un char
-            to[i] = (char)p; 
-            if(to[i] == '\0'){
-                break;
-            }
-        }
-        to[i] = '\0';
-        return true;
-    }
 
 
 #endif // CHANGED
