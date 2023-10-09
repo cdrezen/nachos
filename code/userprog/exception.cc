@@ -144,14 +144,14 @@ void ExceptionHandler(ExceptionType which)
     {
       DEBUG('s', "PutInt\n");
       int val = machine->ReadRegister(4);
-      char buf[11]; // 11: taille max d'un int signé représenté dans un string
+      char buf[12]; // 11: taille max d'un int signé représenté dans un string + 1 pour la terminsaison
       int size = snprintf(buf, 11, "%d", val);
       if (!size)
         break;
       
-      printf("sz=%d", size);
+      DEBUG('s', "sz=%d", size);
 
-      if(size > 10) buf[10] = NULL;
+      if(size > 11) buf[11] = NULL;
       else buf[size] = NULL;
       consoledriver->PutString(buf);
 
@@ -163,8 +163,8 @@ void ExceptionHandler(ExceptionType which)
       int ptr = machine->ReadRegister(4);
       int res = 0;
 
-      char buf[11]; // 11: taille max d'un int signé (incluant le char '-' ) représenté dans un string
-      consoledriver->GetString(buf, 11);
+      char buf[12]; // 11: taille max d'un int signé (incluant le char '-' ) représenté dans un string +1 terminaison
+      consoledriver->GetString(buf, 12);
 
       if (!sscanf(buf, "%d", &res))
         break;
