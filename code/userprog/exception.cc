@@ -166,7 +166,8 @@ void ExceptionHandler(ExceptionType which)
       char buf[12]; // 11: taille max d'un int signé (incluant le char '-' ) représenté dans un string +1 terminaison
       consoledriver->GetString(buf, 11);
 
-      if (!sscanf(buf, "%d", &res))
+      if(buf[0] != '-') buf[11] == NULL; //on ignore le dernier char si c'est un entier positif sinon ça ne rentre pas dans un int
+      if(!sscanf(buf, "%d", &res))
         break;
 
       machine->WriteMem(ptr, sizeof(int), res);
