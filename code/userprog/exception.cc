@@ -83,22 +83,22 @@ void ExceptionHandler(ExceptionType which)
     case SC_Exit: // partie VI
     {
       char str[51];
-      int exit = machine->ReadRegister(2);
-      int res = machine->ReadRegister(4);
+      int exit = machine->ReadRegister(2);//r2: exit code r0 + 1
+      int res = machine->ReadRegister(4);//r4 : r2 du programme precedant copié dans r4 (voir start.S)
       snprintf(str, 51, "programme termine, code=%d val retour=%d.\n", exit, res);
       consoledriver->PutString(str);
-      interrupt->Powerdown();
+      interrupt->Powerdown();//a modifier si on voulais faire autre chose ensuite comme executer un autre programme
       break;
     }
     case SC_PutChar:
     {
       DEBUG('s', "PutChar\n");
-      consoledriver->PutChar(machine->ReadRegister(4));
+      consoledriver->PutChar(machine->ReadRegister(4));//on recupere le char de r4 (1er argument) et on l'ecrit dans la console
       break;
     }
     case SC_GetChar:
     {
-      machine->WriteRegister(2, consoledriver->GetChar());
+      machine->WriteRegister(2, consoledriver->GetChar());//on recupere un char un on le met dans r2 (val de retour)
       break;
     }
     case SC_PutString:
@@ -135,7 +135,7 @@ void ExceptionHandler(ExceptionType which)
       size = i;
       /*/
 
-      machine->copyStringToMachine(to, buf, size);
+      machine->copyStringToMachine(to, buf, size);//on copie les char dans le buffer donne par l'utilisateur
       delete[] buf;
 
       break;
@@ -151,7 +151,7 @@ void ExceptionHandler(ExceptionType which)
       
       DEBUG('s', "sz=%d", size);
 
-      if(size > 11) buf[11] = NULL;
+      if(size > 11) buf[11] = NULL;//si 11 numeros serait lus
       else buf[size] = NULL;
       consoledriver->PutString(buf);
 
@@ -170,7 +170,7 @@ void ExceptionHandler(ExceptionType which)
       if(!sscanf(buf, "%d", &res))
         break;
 
-      machine->WriteMem(ptr, sizeof(int), res);
+      machine->WriteMem(ptr, sizeof(int), res);//on copie le int dans le int donne par l'utilisateur
       break;
     }
 

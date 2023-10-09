@@ -19,7 +19,7 @@ ConsoleDriver::ConsoleDriver(const char *in, const char *out)
 {
     readAvail = new Semaphore("read avail", 0);
     writeDone = new Semaphore("write done", 0);
-    stringIO = new Semaphore("string operation", 1);//VII au cas où plusieurs thread veuillent lire ou ecrire en meme temps
+    stringIO = new Semaphore("string operation", 1);//VII au cas où plusieurs thread veuillent lire ou ecrire en meme temps (une fourchette pour tout le monde.)
 
     console = new Console (in, out, ReadAvailHandler, WriteDoneHandler, NULL);
 }
@@ -57,7 +57,7 @@ void ConsoleDriver::PutString(const char *s)
 
 void ConsoleDriver::GetString(char *s, int n)
 {
-    stringIO->P();
+    stringIO->P();//fourchette en cours d'utilisation
 
     for(int i = 0; i < n; i++)
     {
@@ -65,7 +65,7 @@ void ConsoleDriver::GetString(char *s, int n)
         if (s[i] == '\n' || s[i] == '\0') { break; }//nouvelle ligne ou fin de string ?
     }
 
-    stringIO->V();
+    stringIO->V();//fourchette disponible
 }
 
 unsigned ConsoleDriver::copyStringFromMachine(int from, char *to, unsigned size){
