@@ -144,6 +144,7 @@ class Machine:public dontcopythis {
                                 // translation couldn't be completed.
 
     #ifdef CHANGED
+    unsigned copyStringFromMachine(int from, char *to, unsigned size);
     unsigned copyStringToMachine(int to_ptr, char *buf, unsigned size);
     #endif //CHANGED
 
