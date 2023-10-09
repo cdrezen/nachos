@@ -145,7 +145,8 @@ class Machine:public dontcopythis {
 
     #ifdef CHANGED
     unsigned copyStringToMachine(int to_ptr, char *buf, unsigned size);
-    #endif //CHANGED
+    unsigned copyStringFromMachine(int from, char *to, unsigned size);
+#endif // CHANGED
 
     void RaiseException(ExceptionType which, int badVAddr);
                                 // Trap to the Nachos kernel, because of a
