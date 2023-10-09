@@ -145,7 +145,7 @@ void ExceptionHandler(ExceptionType which)
       DEBUG('s', "PutInt\n");
       int val = machine->ReadRegister(4);
       char buf[12]; // 11: taille max d'un int signé représenté dans un string + 1 pour la terminsaison
-      int size = snprintf(buf, 11, "%d", val);
+      int size = snprintf(buf, 12, "%d", val);
       if (!size)
         break;
       
