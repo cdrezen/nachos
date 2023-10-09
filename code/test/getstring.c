@@ -1,7 +1,8 @@
 #include "syscall.h"
 
-const int TAILLE_LIRE_ECRIRE = 10;
-const int TAILLE_BEAUCOUP_LIRE_ECRIRE = 2000;
+#define TAILLE_LIRE_ECRIRE 10
+#define TAILLE_BEAUCOUP_LIRE_ECRIRE 2000
+
 char buf[TAILLE_LIRE_ECRIRE];
 char bufbcp[TAILLE_BEAUCOUP_LIRE_ECRIRE];
 
