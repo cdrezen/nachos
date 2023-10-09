@@ -106,18 +106,12 @@ void ExceptionHandler(ExceptionType which)
 
       // Initialisation des paramètres de copyStringFromMachine
       int from = machine->ReadRegister(4);
-      int size = MAX_STRING_SIZE + 1;
+      int size = MAX_STRING_SIZE;
       char *to = new char[size];
       int res = 0;
       int i = 0;
-      do
-      {
-        res = machine->copyStringFromMachine(from + (i * size), to, size);
-
-        consoledriver->PutString(to);
-        // Vérifier si la chaîne est vide (fin de fichier)
-        i++;
-      } while (res > 0);
+      consoledriver->copyStringFromMachine(from, to, size);
+      consoledriver->PutString(to);
 
       delete[] to;
       break;
