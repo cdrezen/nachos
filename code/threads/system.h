@@ -32,6 +32,10 @@ extern Timer *timer;            // the hardware alarm clock
 #ifdef USER_PROGRAM
 #include "machine.h"
 extern Machine *machine;        // user program memory and registers
+//TD1
+#include "consoledriver.h"
+extern ConsoleDriver *consoledriver;
+const int MAX_STRING_SIZE = 3500;
 #endif
 
 #ifdef FILESYS_NEEDED           // FILESYS or FILESYS_STUB
@@ -52,9 +56,7 @@ extern PostOffice *postOffice;
 //Action IV.1
 #ifdef CHANGED
 #ifdef USER_PROGRAM
-#include "consoledriver.h"
-extern ConsoleDriver *consoledriver;
-const int MAX_STRING_SIZE = 3500;
+
 #endif
 #endif
 

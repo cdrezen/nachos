@@ -33,19 +33,12 @@ SynchDisk *synchDisk;
 
 #ifdef USER_PROGRAM		// requires either FILESYS or FILESYS_STUB
 Machine *machine;		// user program memory and registers
+//TD1.IV.1
+ConsoleDriver *consoledriver;
 #endif
 
 #ifdef NETWORK
 PostOffice *postOffice;
-#endif
-
-
-
-//Action IV.1
-#ifdef CHANGED
-#ifdef USER_PROGRAM
-ConsoleDriver *consoledriver;
-#endif
 #endif
 
 
@@ -240,6 +233,12 @@ Cleanup ()
         delete machine;
         machine = NULL;
     }
+    //TD1.IV
+    if(consoledriver)
+    {
+        delete consoledriver;
+        consoledriver = NULL;
+    }
 #endif
 
 #ifdef FILESYS_NEEDED
@@ -255,19 +254,6 @@ Cleanup ()
         synchDisk = NULL;
     }
 #endif
-
-
-//Action IV
-#ifdef CHANGED
-    #ifdef USER_PROGRAM
-        if(consoledriver)
-        {
-            delete consoledriver;
-            consoledriver = NULL;
-        }
-    #endif
-#endif
-
 
     if (timer) {
         delete timer;

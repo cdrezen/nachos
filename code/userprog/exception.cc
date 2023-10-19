@@ -24,6 +24,8 @@
 #include "copyright.h"
 #include "system.h"
 #include "syscall.h"
+//TD2.I.4
+#include "userthread.h"
 
 //----------------------------------------------------------------------
 // UpdatePC : Increments the Program Counter register in order to resume
@@ -80,6 +82,10 @@ void ExceptionHandler(ExceptionType which)
       interrupt->Powerdown();
       break;
     }
+
+    //TD1:
+    #pragma region TD1
+
     case SC_Exit: // partie VI
     {
       char str[51];
@@ -173,6 +179,25 @@ void ExceptionHandler(ExceptionType which)
         break;
 
       machine->WriteMem(ptr, sizeof(int), res); // on copie le int dans le int donne par l'utilisateur
+      break;
+    }
+    #pragma endregion TD1
+    //TD2:
+
+    case SC_ThreadCreate:
+    {
+      DEBUG('s', "ThreadCreate\n");
+      int f = machine->ReadRegister(4);   // arg0
+      int arg = machine->ReadRegister(5); // arg1
+
+      DEBUG('s', "f=%d, arg=%d.\n", f, arg);
+
+      do_ThreadCreate(f, arg);
+
+      break;
+    }
+    case SC_ThreadExit:
+    {
       break;
     }
 
