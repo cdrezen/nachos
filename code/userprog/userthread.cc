@@ -3,6 +3,8 @@
 #include "translate.h"
 #include "machine.h"
 
+int stackPtr;
+
 static void StartUserThread(void *schmurtz)
 {
     int* args = (int*)(schmurtz);
@@ -28,9 +30,13 @@ static void StartUserThread(void *schmurtz)
     // Set the stack register to the end of the address space, where we
     // allocated the stack; but subtract off a bit, to make sure we don't
     // accidentally reference off the end!
-    currentThread->space->AllocateUserStack();
+    
+    stackPtr = currentThread->space->AllocateUserStack();
+    machine->WriteRegister (StackReg, stackPtr);
 
     //currentThread->Yield();
+
+    //currentThread->RestoreUserState();
 
     machine->Run();
 
@@ -53,8 +59,16 @@ int do_ThreadCreate(int f, int arg)
     schmurtz[0] = f;
     schmurtz[1] = arg;
     t->space = currentThread->space;
+    //t->RestoreUserState();
+    t->SaveUserState();
     t->Start(StartUserThread, schmurtz);
     currentThread->Yield();
     
     return 0;
+}
+
+void do_ThreadExit()
+{
+    currentThread->RestoreUserState();
+    currentThread->Finish();
 }

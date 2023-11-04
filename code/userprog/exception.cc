@@ -88,11 +88,14 @@ void ExceptionHandler(ExceptionType which)
 
     case SC_Exit: // partie VI
     {
-      char str[51];
+      //char str[51];
       int exit = machine->ReadRegister(2); // r2: exit code r0 + 1
       int res = machine->ReadRegister(4);  // r4 : r2 du programme precedant copié dans r4 (voir start.S)
-      snprintf(str, 51, "programme termine, code=%d val retour=%d.\n", exit, res);
-      consoledriver->PutString(str);
+      
+      //snprintf(str, 51, "programme termine, code=%d val retour=%d.\n", exit, res);
+      //consoledriver->PutString(str);
+      DEBUG('p', "programme termine, code=%d val retour=%d.\n", exit, res);
+      
       interrupt->Powerdown(); // a modifier si on voulais faire autre chose ensuite comme executer un autre programme
       break;
     }
@@ -198,6 +201,7 @@ void ExceptionHandler(ExceptionType which)
     }
     case SC_ThreadExit:
     {
+      do_ThreadExit();
       break;
     }
 
