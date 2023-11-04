@@ -30,6 +30,8 @@ static void StartUserThread(void *schmurtz)
     // accidentally reference off the end!
     currentThread->space->AllocateUserStack();
 
+    //currentThread->Yield();
+
     machine->Run();
 
     delete[] args;
@@ -52,6 +54,7 @@ int do_ThreadCreate(int f, int arg)
     schmurtz[1] = arg;
     t->space = currentThread->space;
     t->Start(StartUserThread, schmurtz);
+    currentThread->Yield();
     
     return 0;
 }
