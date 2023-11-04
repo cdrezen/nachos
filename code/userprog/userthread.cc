@@ -12,13 +12,14 @@ static void StartUserThread(void *schmurtz)
 
     int i;
 
-    printf("StartUserThread   f ptr: %d     arg ptr: %d.\n", f, arg);
+    DEBUG('t', "StartUserThread   f ptr: %d     arg ptr: %d.\n", f, arg);
     
      for (i = 0; i < NumTotalRegs; i++)
         machine->WriteRegister (i, 0);
 
     // Initial program counter -- must be location of the __start function
     machine->WriteRegister (PCReg, f);
+    machine->WriteRegister (4, arg);
 
     // Need to also tell MIPS where next instruction is, because
     // of branch delay possibility
@@ -27,22 +28,21 @@ static void StartUserThread(void *schmurtz)
     // Set the stack register to the end of the address space, where we
     // allocated the stack; but subtract off a bit, to make sure we don't
     // accidentally reference off the end!
-    machine->WriteRegister (StackReg, numPages * PageSize - 256);
+    currentThread->space->AllocateUserStack();
 
-    DEBUG ('a', "Initializing stack register to 0x%x\n",
-           numPages * PageSize - 256);
+    machine->Run();
 
-    delete[] schmurtz;
+    delete[] args;
 }
 
-int nameid = 0;
+int nameid = 1;
 int* schmurtz;
+char name[8];
 
 int do_ThreadCreate(int f, int arg)
 {
-    printf("do_ThreadCreate    f ptr: %d     arg ptr: %d.\n", f, arg);
+    DEBUG('t', "do_ThreadCreate    f ptr: %d     arg ptr: %d.\n", f, arg);
     
-    char name[8];
     sprintf(name, "thread%d", nameid++);
     
     Thread *t = new Thread(name);
@@ -50,7 +50,8 @@ int do_ThreadCreate(int f, int arg)
     schmurtz = new int[2];
     schmurtz[0] = f;
     schmurtz[1] = arg;
+    t->space = currentThread->space;
     t->Start(StartUserThread, schmurtz);
-
+    
     return 0;
 }

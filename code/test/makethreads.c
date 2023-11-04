@@ -7,6 +7,8 @@ void SimpleThread(void *arg)
     int which = (long) arg;
     int num;
 
+    monprintf("SimpleThread.");
+
     for (num = 0; num < 10; num++)
       {
           monprintf("*** thread %d looped %d times\n", which, num);
@@ -16,5 +18,6 @@ void SimpleThread(void *arg)
 
 int main ()
 {
-    return ThreadCreate(SimpleThread, (void*) 1);
+    ThreadCreate(SimpleThread, (void*) 1);
+    //while(1);
 }

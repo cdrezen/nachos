@@ -29,6 +29,8 @@ class AddrSpace:public dontcopythis
     // stored in the file "executable"
     ~AddrSpace ();              // De-allocate an address space
 
+    int AllocateUserStack();
+
     void InitRegisters (void);  // Initialize user-level CPU registers,
     // before jumping to user code
 
