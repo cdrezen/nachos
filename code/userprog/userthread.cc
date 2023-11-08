@@ -12,11 +12,11 @@ static void StartUserThread(void *schmurtz)
     int f = args[0];
     int arg = args[1];
 
-    int i;
+    delete[] args;
 
     DEBUG('t', "StartUserThread   f ptr: %d     arg ptr: %d.\n", f, arg);
     
-     for (i = 0; i < NumTotalRegs; i++)
+     for (int i = 0; i < NumTotalRegs; i++)
         machine->WriteRegister (i, 0);
 
     // Initial program counter -- must be location of the __start function
@@ -32,6 +32,7 @@ static void StartUserThread(void *schmurtz)
     // accidentally reference off the end!
     
     stackPtr = currentThread->space->AllocateUserStack();
+
     machine->WriteRegister (StackReg, stackPtr);
 
     //currentThread->Yield();
@@ -39,8 +40,6 @@ static void StartUserThread(void *schmurtz)
     //currentThread->RestoreUserState();
 
     machine->Run();
-
-    delete[] args;
 }
 
 int nameid = 1;
@@ -51,14 +50,16 @@ int do_ThreadCreate(int f, int arg)
 {
     DEBUG('t', "do_ThreadCreate    f ptr: %d     arg ptr: %d.\n", f, arg);
     
-    sprintf(name, "thread%d", nameid++);
-    
+    sprintf(name, "thread%d", nameid++);  
     Thread *t = new Thread(name);
+
+    if(!t) return -1;
     
     schmurtz = new int[2];
     schmurtz[0] = f;
     schmurtz[1] = arg;
     t->space = currentThread->space;
+    t->space->nbUserThreads++;
     //t->RestoreUserState();
     t->SaveUserState();
     t->Start(StartUserThread, schmurtz);
@@ -69,6 +70,13 @@ int do_ThreadCreate(int f, int arg)
 
 void do_ThreadExit()
 {
-    currentThread->RestoreUserState();
-    currentThread->Finish();
+    Thread* t = currentThread;
+
+    t->RestoreUserState();
+
+    t->space->nbUserThreads--;
+    DEBUG('t', "thread exit: nbUserThreads=%d\n", t->space->nbUserThreads);//
+
+    if(t->space->nbUserThreads > 0) t->Finish();
+    else interrupt->Powerdown(); 
 }

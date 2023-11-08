@@ -4,6 +4,8 @@
 #include "copyright.h"
 #include "utility.h"
 #include "console.h"
+#include "synch.h"
+
 class ConsoleDriver:dontcopythis {
 public:
 // initialize the hardware console device
@@ -17,8 +19,6 @@ void GetString(char *s, int n); // Behaves like fgets(3S)
 //VII.4
 void PutInt(int i);
 void GetInt(int ptr);
-
-unsigned copyStringFromMachine(int from, char *to, unsigned size);
 
 private:
 Console *console;

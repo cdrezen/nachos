@@ -88,6 +88,8 @@ class Lock:public dontcopythis
   private:
     const char *name;           // for debugging
     // plus some other stuff you'll need to define
+    Thread* owner;
+    Semaphore* lock;
 };
 
 // The following class defines a "condition variable".  A condition

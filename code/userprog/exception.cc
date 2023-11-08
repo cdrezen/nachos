@@ -135,6 +135,7 @@ void ExceptionHandler(ExceptionType which)
         size = MAX_STRING_SIZE;
 
       char *buf = new char[size];
+
       consoledriver->GetString(buf, size);
 
       /*/facon de recuperer la nouvelle taille sans modif la signature de consoledriver->GetString
@@ -144,6 +145,7 @@ void ExceptionHandler(ExceptionType which)
       /*/
 
       machine->copyStringToMachine(to, buf, size); // on copie les char dans le buffer donne par l'utilisateur
+
       delete[] buf;
 
       break;

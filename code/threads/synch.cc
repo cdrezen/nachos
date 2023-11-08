@@ -109,22 +109,44 @@ Semaphore::V ()
 // the test case in the network assignment won't work!
 Lock::Lock (const char *debugName)
 {
-    (void) debugName;
-    ASSERT_MSG(FALSE, "TODO\n");
+    name = debugName;
+    owner = currentThread;
+    lock = new Semaphore("lock", 1);
 }
 
 Lock::~Lock ()
 {
+    delete lock;
 }
+
 void
 Lock::Acquire ()
 {
-    ASSERT_MSG(FALSE, "TODO\n");
+    IntStatus oldLevel = interrupt->SetLevel (IntOff);
+
+    lock->P();
+    owner = currentThread;
+
+    interrupt->SetLevel (oldLevel);
 }
+
 void
 Lock::Release ()
 {
-    ASSERT_MSG(FALSE, "TODO\n");
+    IntStatus oldLevel = interrupt->SetLevel (IntOff);
+
+    ASSERT_MSG(isHeldByCurrentThread(), "Lock: pas proprietaire.");
+
+    owner = NULL;
+    lock->V();
+
+    interrupt->SetLevel (oldLevel);
+}
+
+bool
+Lock::isHeldByCurrentThread()
+{
+    return owner == currentThread;
 }
 
 Condition::Condition (const char *debugName)
