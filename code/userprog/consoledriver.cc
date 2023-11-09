@@ -13,6 +13,7 @@ static Semaphore *writeDone;
 //static Semaphore *charIO;
 static Lock* stringIO;
 static Lock* charIO;
+static Condition* ioAvail;
 
 static void ReadAvailHandler(void *arg) { (void) arg; readAvail->V(); }
 static void WriteDoneHandler(void *arg) { (void) arg; writeDone->V(); }
@@ -26,6 +27,7 @@ ConsoleDriver::ConsoleDriver(const char *in, const char *out)
     //charIO = new Semaphore("read/write char operation", 1);
     stringIO = new Lock("string operation");
     charIO = new Lock("read/write char operation");
+    //ioAvail = new Condition("io available");
 
     console = new Console (in, out, ReadAvailHandler, WriteDoneHandler, NULL);
 }
@@ -61,10 +63,12 @@ char ConsoleDriver::GetChar()
 void ConsoleDriver::PutString(const char *s)
 {
     stringIO->Acquire();//P();
+
     int i = 0;
     for (i = 0; *(s+i) != NULL; i++){//on fait PutChar tant que s[i] n'est pas la terminaison de string
         PutChar(*(s+i));
     }
+
     stringIO->Release();//V();
 }
 

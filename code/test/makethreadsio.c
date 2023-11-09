@@ -26,6 +26,8 @@ int main ()
     PutString("ici le main.\n");
     PutString("ici le main.\n");
     ThreadCreate(SimpleThread, (void*) 1);
+    ThreadCreate(SimpleThread, (void*) 2);
+    ThreadCreate(SimpleThread, (void*) 3);
     PutChar('\n');
     PutString("ici le main.\n");
     PutString("ici le main.\n");

@@ -135,10 +135,10 @@ Lock::Release ()
 {
     IntStatus oldLevel = interrupt->SetLevel (IntOff);
 
-    ASSERT_MSG(isHeldByCurrentThread(), "Lock: pas proprietaire.");
+    ASSERT_MSG(isHeldByCurrentThread(), "Lock: pas thread proprietaire.");
 
-    owner = NULL;
     lock->V();
+    owner = NULL;
 
     interrupt->SetLevel (oldLevel);
 }
@@ -151,26 +151,41 @@ Lock::isHeldByCurrentThread()
 
 Condition::Condition (const char *debugName)
 {
-    (void) debugName;
-    ASSERT_MSG(FALSE, "TODO\n");
+    name = debugName;
+    wait = new Semaphore("wait", 0);
 }
 
 Condition::~Condition ()
 {
+    delete wait;
 }
+
 void
 Condition::Wait (Lock * conditionLock)
 {
-    (void) conditionLock;
-    ASSERT_MSG(FALSE, "TODO\n");
+    IntStatus oldLevel = interrupt->SetLevel (IntOff);
+
+    ASSERT(conditionLock->isHeldByCurrentThread());
+
+    conditionLock->Release();
+    wait->P();
+    conditionLock->Acquire();
+
+    interrupt->SetLevel (oldLevel);
 }
 
 void
 Condition::Signal (Lock * conditionLock)
 {
-    (void) conditionLock;
-    ASSERT_MSG(FALSE, "TODO\n");
+    IntStatus oldLevel = interrupt->SetLevel (IntOff);
+
+    ASSERT(conditionLock->isHeldByCurrentThread());
+    
+    wait->V();
+
+    interrupt->SetLevel (oldLevel);
 }
+
 void
 Condition::Broadcast (Lock * conditionLock)
 {
