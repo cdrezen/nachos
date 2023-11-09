@@ -60,8 +60,6 @@ int do_ThreadCreate(int f, int arg)
     schmurtz[1] = arg;
     t->space = currentThread->space;
     t->space->nbUserThreads++;
-    //t->RestoreUserState();
-    t->SaveUserState();
     t->Start(StartUserThread, schmurtz);
     currentThread->Yield();
     
@@ -72,11 +70,13 @@ void do_ThreadExit()
 {
     Thread* t = currentThread;
 
-    t->RestoreUserState();
-
     t->space->nbUserThreads--;
     DEBUG('t', "thread exit: nbUserThreads=%d\n", t->space->nbUserThreads);//
 
-    if(t->space->nbUserThreads > 0) t->Finish();
-    else interrupt->Powerdown(); 
+    if(t->space->nbUserThreads > 0) t->Finish();//suprimer bitmap
+    else 
+    {
+        delete t->space;//:Que doit ont faire de space?
+        interrupt->Powerdown();
+    }
 }
