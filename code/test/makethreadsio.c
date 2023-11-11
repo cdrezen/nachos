@@ -12,9 +12,13 @@ void SimpleThread(void *arg)
     char which = (char) arg;
     char num;
 
+    char* str = "je suis un thread (x) looped y times\n";
+
     for (num = 1; num < 10; num++)
       {
-        monprintf("je suis un thread (%c) boucle %c fois\n", ASCII_LET + which, ASCII_NUM + num);
+        str[19] = ASCII_LET+which;
+        str[29] = ASCII_NUM+num;
+        PutString(str);
       }
 
     ThreadExit();
