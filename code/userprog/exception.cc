@@ -187,15 +187,14 @@ void ExceptionHandler(ExceptionType which)
       break;
     }
     #pragma endregion TD1
+    
     //TD2:
-
     case SC_ThreadCreate:
     {
-      DEBUG('s', "ThreadCreate\n");
       int f = machine->ReadRegister(4);   // arg0
       int arg = machine->ReadRegister(5); // arg1
 
-      DEBUG('s', "f=%d, arg=%d.\n", f, arg);
+      DEBUG('t', "ThreadCreate f=%d, arg=%d.\n", f, arg);
 
       do_ThreadCreate(f, arg);
 
@@ -204,6 +203,19 @@ void ExceptionHandler(ExceptionType which)
     case SC_ThreadExit:
     {
       do_ThreadExit();
+      break;
+    }
+    case SC_P:
+    {
+      int id = machine->ReadRegister(4); 
+      int init = machine->ReadRegister(5);
+      usync->P(id, init);
+      break;
+    }
+    case SC_V:
+    {
+      int id = machine->ReadRegister(4); 
+      usync->V(id);
       break;
     }
 

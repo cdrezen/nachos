@@ -192,3 +192,9 @@ Condition::Broadcast (Lock * conditionLock)
     (void) conditionLock;
     ASSERT_MSG(FALSE, "TODO\n");
 }
+
+UserSemaphore::UserSemaphore(const char *debugName, int id, int init) 
+    : Semaphore::Semaphore(debugName, init)
+{
+    _id = id;
+}

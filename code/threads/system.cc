@@ -35,6 +35,8 @@ SynchDisk *synchDisk;
 Machine *machine;		// user program memory and registers
 //TD1.IV.1
 ConsoleDriver *consoledriver;
+//TD2.IV
+UserSync* usync;
 #endif
 
 #ifdef NETWORK
@@ -234,11 +236,8 @@ Cleanup ()
         machine = NULL;
     }
     //TD1.IV
-    if(consoledriver)
-    {
-        delete consoledriver;
-        consoledriver = NULL;
-    }
+    if(consoledriver) delete consoledriver;   
+    if(usync) delete usync; //TD2
 #endif
 
 #ifdef FILESYS_NEEDED

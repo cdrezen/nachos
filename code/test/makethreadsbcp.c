@@ -86,7 +86,7 @@ void ThreadLent(void *arg)
 int main ()
 {
     unsigned nom;
-    const unsigned NB_THREAD = 100;
+    const unsigned NB_THREAD = 10;
 
     for(nom = BOGDANOF; nom < BOGDANOF + NB_THREAD; nom++)
     {

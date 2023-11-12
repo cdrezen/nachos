@@ -46,6 +46,9 @@
 //TD2.I.3
 #define SC_ThreadCreate 17
 #define SC_ThreadExit   18
+//TD2.IV
+#define SC_P            19
+#define SC_V            20
 
 #ifdef IN_USER_MODE
 
@@ -167,8 +170,8 @@ void ThreadExit(void);
  * au lieu de lancer un thread avec (f, arg) on lance un thread avec (g={.f(.arg); ThreadExit()}, [f, arg])
  */
 
-#define FORCE_THREADEXIT
-#ifdef FORCE_THREADEXIT
+#define FORCETHREADEXIT_FULLMACRO
+#ifdef FORCETHREADEXIT_FULLMACRO
 
 typedef void (*func)(void* arg);
 typedef struct 
@@ -203,6 +206,21 @@ func _F(f_arg* args) {
 #define ThreadCreate(f, arg) ThreadCreate(_F1, (void**){(void*)f, (void*)arg}) */
 
 #endif // FORCE_THREADEXIT
+
+int P(int id, int init);
+void V(int id);
+
+typedef struct
+{
+  int id;
+} sem_t;
+
+sem_t* make_sem_t() { sem_t s = { -1 }; return &s; }
+
+void sem_t_init(sem_t* sem, int val) { if(!sem->id) { sem->id = P(-1, val); } else return; }
+
+#define P(sem) P(sem->id, 0)
+#define V(sem) V(sem->id)
 
 #endif // IN_USER_MODE
 

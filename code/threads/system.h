@@ -36,6 +36,9 @@ extern Machine *machine;        // user program memory and registers
 #include "consoledriver.h"
 extern ConsoleDriver *consoledriver;
 const int MAX_STRING_SIZE = 3500;
+//TD2
+#include "usersync.h"
+extern UserSync *usync;
 #endif
 
 #ifdef FILESYS_NEEDED           // FILESYS or FILESYS_STUB

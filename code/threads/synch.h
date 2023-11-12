@@ -148,4 +148,19 @@ class Condition:public dontcopythis
     // plus some other stuff you'll need to define
     Semaphore* wait;
 };
+
+class UserSemaphore: public Semaphore
+{
+  public:
+    UserSemaphore (const char* debugName, int id, int init);
+    ~UserSemaphore();
+    int getId (void)
+    {
+        return _id;
+    }
+
+  private:
+    int _id;
+};
+
 #endif // SYNCH_H

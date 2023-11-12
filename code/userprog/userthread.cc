@@ -1,7 +1,6 @@
+#include "userthread.h"
 #include "system.h"
 #include "synch.h"
-#include "translate.h"
-#include "machine.h"
 
 int stackPtr;
 
@@ -39,6 +38,13 @@ static void StartUserThread(void *schmurtz)
 
     //currentThread->RestoreUserState();
 
+    if (DebugIsEnabled('t'))
+    {
+        char str[64];
+        snprintf(str, 63, "dumps/mem_start_%s.svg", currentThread->getName());
+        machine->DumpMem (str);
+    }
+
     machine->Run();
 }
 
@@ -73,7 +79,17 @@ void do_ThreadExit()
     t->space->nbUserThreads--;
     DEBUG('t', "thread exit: nbUserThreads=%d\n", t->space->nbUserThreads);//
 
-    if(t->space->nbUserThreads > 0) t->Finish();//suprimer bitmap
+    if (DebugIsEnabled('t'))
+    {
+        char str[64];
+        snprintf(str, 63, "dumps/mem_exit_%s.svg", t->getName());
+        machine->DumpMem (str);
+    }
+
+    if(t->space->nbUserThreads > 0)
+    {
+        t->Finish();//suprimer bitmap
+    }
     else 
     {
         delete t->space;//:Que doit ont faire de space?

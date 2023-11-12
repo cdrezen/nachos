@@ -125,24 +125,23 @@ main (int argc, char **argv)
 
                 //TD1.IV.1.
                 consoledriver = new ConsoleDriver(NULL, NULL);
+                //TD2.IV
+                usync = new UserSync();
 
                 StartProcess (*(argv + 1));
                 argCount = 2;
             }
-            #ifdef CHANGED
-                else if(!strcmp (*argv, "-sc"))
-                  {
-                    /// une option -sc de test de la console synchrone qui lance la fonction ConsoleDriverTest que l’on a ajouté
-                    if (argc == 1)
-                              ConsoleDriverTest(NULL, NULL);
-                    else
-                    {
-                       ASSERT_MSG (argc > 2, "-sc needs two file names\n");
-                        ConsoleDriverTest (*(argv + 1), *(argv + 2));
-                       argCount = 3;
-                    }
-                  }
-          #endif //CHANGED
+          else if(!strcmp (*argv, "-sc"))
+            {
+              /// une option -sc de test de la console synchrone qui lance la fonction ConsoleDriverTest que l’on a ajouté
+              if (argc == 1) ConsoleDriverTest(NULL, NULL);
+              else
+              {
+                 ASSERT_MSG (argc > 2, "-sc needs two file names\n");
+                 ConsoleDriverTest (*(argv + 1), *(argv + 2));
+                 argCount = 3;
+              }
+            }
           else if (!strcmp (*argv, "-c"))
             {                        // test the console
                 if (argc == 1)
