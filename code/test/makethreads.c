@@ -7,11 +7,11 @@
 void SimpleThread(void *arg)
 {
     PutChar((char)arg);
-    ThreadExit();
+    //ThreadExit();
 }
 
-int main ()
+int main()
 {
-    ThreadCreate(SimpleThread, (void*) 'a');
+    ThreadCreate(SimpleThread, 'a');
     ThreadExit();
 }

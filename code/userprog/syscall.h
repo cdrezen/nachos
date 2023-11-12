@@ -162,6 +162,48 @@ void GetInt(int* n);
 int ThreadCreate(void f(void *arg), void *arg);
 void ThreadExit(void);
 
+//TD2.III
+/* Solution peu elegante pour forcer l'appel à ThreadExit à la fin de chaque nouveau thread utilisateur.
+ * au lieu de lancer un thread avec (f, arg) on lance un thread avec (g={.f(.arg); ThreadExit()}, [f, arg])
+ */
+
+#define FORCE_THREADEXIT
+#ifdef FORCE_THREADEXIT
+
+typedef void (*func)(void* arg);
+typedef struct 
+{ 
+  func f;
+  void* arg;
+} f_arg;
+
+void* make_farg(func f, void* arg)
+{
+  f_arg farg = {f, arg};
+  return &farg;//pas indefini?
+}
+
+func _F(f_arg* args) { 
+  //f_arg* args = (struct f_arg*)(args_);
+  args->f(args->arg);
+  //free(args);...
+  ThreadExit();
+  return;
+}
+
+#define ThreadCreate(f, arg) ThreadCreate(_F, make_farg((func)f, (void*)arg))
+
+/* func _F1(void** args) {
+  func f = (func)args[0];
+  void* arg = args[1];
+  f(arg);
+  ThreadExit();
+  return;
+}
+#define ThreadCreate(f, arg) ThreadCreate(_F1, (void**){(void*)f, (void*)arg}) */
+
+#endif // FORCE_THREADEXIT
+
 #endif // IN_USER_MODE
 
 #endif /* SYSCALL_H */
