@@ -1,4 +1,8 @@
-// programme utilisateur qui teste la creation de beaucoup de threads, 
+// programme utilisateur qui teste la creation de beaucoup de threads,
+// et demontre si la partie II.4 est bien réalisé on non
+// normalement il doivent rechercher leurs noms puis généré à partir d'un int 'traduit' en 8 lettres
+// puis afficher 'bonjoole' (pas de 'r' et 'u' dans notre alphabet à 16 lettres).
+// il y doit y avoir des noms de thread et des résultat mal affiché si on a pas réussi la partie II.4.
 
 //!\\ à lancer avec -rs pour un ordonancement généré à partir d'une graine
 

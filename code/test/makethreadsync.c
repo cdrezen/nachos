@@ -1,6 +1,7 @@
-// programme utilisateur qui teste la creation de threads avec des sempahores, 
-// plusieurs threads augmentent le même compteur, écrivent dans le même string et affichent la progression.
-// quand le compteur est arrivé à la valeur cible le mot "bogdanof" doit etre affiché
+// programme utilisateur qui teste la bonne résolution d'un probleme producteur/consomateur avec des sempahores
+// notre producteur est main et nos consomateur(s) sont le(s) thread(s) utilisateur
+// Ce n'est pas vraiment le probleme des philosophes. le philosphe doit manger des fourchettes produites et ne doit pas mourir de faim.
+// plusieurs threads modifient le même compteur, et affichent la progression.
 
 //!\\ à lancer avec -rs pour un ordonancement généré à partir d'une graine
 
