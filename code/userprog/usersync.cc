@@ -26,15 +26,17 @@ int UserSync::createSemaphore(int init)
 {
     if(init < 0) return -1;
     char name[16];
-    int id = this->newid++;
+    int id = newid++;
     sprintf(name, "usem%d", id);  
     UserSemaphore* sem = new UserSemaphore(name, id, init);
     userSemaphores->Append(sem);
+    DEBUG('S', "new S: id%d\n", id);//
     return id;
 }
 
 int UserSync::P(int id, int init)
 {
+    DEBUG('S', "P: id%d\n", id);//
     if(id == -1) return createSemaphore(init);
 
     UserSemaphore* sem = findSemaphore(id);
@@ -47,6 +49,7 @@ int UserSync::P(int id, int init)
 
 void UserSync::V(int id)
 {
+    DEBUG('S', "V: id%d\n", id);//
     UserSemaphore* sem = findSemaphore(id);
     if(!sem) return;
     sem->V();

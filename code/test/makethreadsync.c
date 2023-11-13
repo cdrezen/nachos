@@ -25,14 +25,14 @@ void philosophe(void *arg)
     sem_t* production_fourchette = args->sem;
     sem_t* consomation_fourchette = args->sem1;
     sem_t* io_sem = args->io_sem;
-
+    int tmp_fourchette;
     while(1)
     {
       P(production_fourchette);
       //while((*fourchettes) < 200);// { monprintf(io_sem, "(%s) Oh non, il reste %d fourchettes.\n", nom, *fourchettes); }//attente active
-      (*fourchettes) -= 1;
+        tmp_fourchette = --(*fourchettes);
       V(consomation_fourchette);
-      //monprintf(io_sem, "(%s) Miam, il reste %d fourchettes.\n", nom, *fourchettes);
+      monprintf(io_sem, "(%s) Miam, il reste %d fourchettes.\n", nom, tmp_fourchette);
     }
 }
 
@@ -44,13 +44,14 @@ void fabricant_fourchettes(void* arg)
     sem_t* production_fourchette = args->sem;
     sem_t* consomation_fourchette = args->sem1;
     sem_t* io_sem = args->io_sem;
+    int tmp_fourchette;
 
     while(1)
     {
       P(consomation_fourchette);
-      (*fourchettes) += 1;
+        tmp_fourchette = ++(*fourchettes);
       V(production_fourchette);
-      monprintf(io_sem, "(%s) Tenez, voici 1 fouchette, il reste %d fourchettes.\n", nom, *fourchettes);
+      monprintf(io_sem, "(%s) Tenez, voici 1 fouchette, il reste %d fourchettes.\n", nom, tmp_fourchette);
     }
 }
 
@@ -58,7 +59,7 @@ const int FOURCHETTES_MIN = 1;
 
 int main ()
 {
-    int fourchettes = 0;
+    int fourchettes = 1;
     sem_t production_fourchette = { -1 };
     sem_t consomation_fourchette = { -1 };
     sem_t io_sem = { -1 };
@@ -68,12 +69,15 @@ int main ()
     simple_args aristote = { "Aristote", &fourchettes, &production_fourchette, &consomation_fourchette, &io_sem };
 
     sem_t_init(&production_fourchette, 0);
-    sem_t_init(&consomation_fourchette, 10);
+    sem_t_init(&consomation_fourchette,2);
     sem_t_init(&io_sem, 1);
 
-    ThreadCreate(fabricant_fourchettes, &fabricant);
+    //ThreadCreate(fabricant_fourchettes, &fabricant);
     ThreadCreate(philosophe, &nietzsche);
-    //ThreadCreate(philosophe, &aristote);
+    ThreadCreate(philosophe, &aristote);
+
+    //
+    fabricant_fourchettes(&fabricant);
 
     ThreadExit();
 }

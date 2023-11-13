@@ -217,7 +217,7 @@ typedef struct
 
 sem_t* make_sem_t() { sem_t s = { -1 }; return &s; }
 
-void sem_t_init(sem_t* sem, int val) { if(!sem->id) { sem->id = P(-1, val); } else return; }
+void sem_t_init(sem_t* sem, int val) { if(!sem->id || sem->id < 0) { sem->id = P(-1, val); } else return; }
 
 #define P(sem) P(sem->id, 0)
 #define V(sem) V(sem->id)

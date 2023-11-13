@@ -209,7 +209,7 @@ void ExceptionHandler(ExceptionType which)
     {
       int id = machine->ReadRegister(4); 
       int init = machine->ReadRegister(5);
-      usync->P(id, init);
+      machine->WriteRegister(2, usync->P(id, init));
       break;
     }
     case SC_V:
