@@ -17,4 +17,4 @@ int main()
     ThreadCreate(SimpleThread, 'c');
     ThreadCreate(SimpleThread, 'd');
     ThreadExit();
-}
+} 
