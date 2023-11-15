@@ -34,14 +34,8 @@ static void StartUserThread(void *schmurtz)
     // accidentally reference off the end!
     
     stackPtr = currentThread->space->AllocateUserStack(pos);
-            printf("\n stack  = %d\n",stackPtr);
 
     machine->WriteRegister (StackReg, stackPtr);
-
-    //currentThread->Yield();
-
-    //currentThread->RestoreUserState();
-
     if (DebugIsEnabled('t'))
     {
         char str[64];
@@ -58,33 +52,23 @@ char name[8];
 
 int do_ThreadCreate(int f, int arg)
 {
-    // PrintI();
-    // printf("\n");
+
     DEBUG('t', "do_ThreadCreate    f ptr: %d     arg ptr: %d.\n", f, arg);
     
     sprintf(name, "thread%d", nameid++);  
-    // th->P();
     schmurtz = new int[2];
     schmurtz[0] = f;
     schmurtz[1] = arg;
-    int pos = FindI();
+    int pos = synchFind();
     if(pos == -1){
         delete(schmurtz);
         return -1;
     }
     schmurtz[2] = pos;
-    //mutexNumThread->P();
-    //mutexNumThread->V();
-   // printf("numThread = %d\n",t->space->nbUserThreads);
-//    th->V();
     Thread *t = new Thread(name);
     if(!t) return -1;
     t->space = currentThread->space;
-        // mutexNumThread->P();
-
     t->space->nbUserThreads++;
-        // mutexNumThread->V();
-
     t->Start(StartUserThread, schmurtz);
     currentThread->Yield();
 
@@ -108,11 +92,13 @@ void do_ThreadExit()
 
     if(t->space->nbUserThreads > 0)
     {
+        //clear(pos)
         t->Finish();//suprimer bitmap
     }
     else 
     {
-        delete t->space;//:Que doit ont faire de space?
+        deleteBitMap();
+        delete t->space;
         interrupt->Powerdown();
     }
 }

@@ -13,5 +13,8 @@ void SimpleThread(void *arg)
 int main()
 {
     ThreadCreate(SimpleThread, 'a');
+    ThreadCreate(SimpleThread, 'b');
+    ThreadCreate(SimpleThread, 'c');
+    ThreadCreate(SimpleThread, 'd');
     ThreadExit();
 }

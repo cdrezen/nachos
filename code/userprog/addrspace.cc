@@ -310,27 +310,14 @@ AddrSpace::RestoreState ()
     machine->currentPageTableSize = numPages;
 }
 
-int FindI(){
+//Fonction qui rajoute des sémaphores aux méthodes de bitmap.h
+int synchFind(){
     bmap->P();
     int i = bitmap->Find();
     bmap->V();
-    // if (i == -1){
-    //     i = (UserStacksAreaSize / 256) -1 ;
-    // }
-        // printf("\n stack  = %d\n",i);
-
     return i;
 }
 
-void PrintI(){
-    bmap->P();
-    bitmap->Print();
-    bmap->V();
-}
-
-int numClear(){
-    bmap->P();
-    int res = bitmap->NumClear();
-    bmap->V();
-    return res;
+void deleteBitMap(){
+    delete(bitmap);
 }

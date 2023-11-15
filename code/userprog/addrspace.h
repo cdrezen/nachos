@@ -51,9 +51,8 @@ class AddrSpace:public dontcopythis
     TranslationEntry * pageTable; // Page table
     unsigned int numPages;      // Number of pages in the page table
 };
-int FindI();
-void PrintI();
-int numClear();
+int synchFind();
+void deleteBitMap();
 
 extern List AddrspaceList;
 
