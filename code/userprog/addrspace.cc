@@ -24,7 +24,6 @@
 #include "bitmap.h"
 
 
-static Semaphore *indice = new Semaphore("incre & decr", 1);
 static BitMap *bitmap = new BitMap(UserStacksAreaSize / 256);
 static Semaphore *bmap = new Semaphore("Bitmap",1);
 
