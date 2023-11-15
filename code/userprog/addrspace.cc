@@ -183,9 +183,9 @@ int AddrSpace::AllocateUserStack()
     //    machine->WriteRegister (i, 0);
 
     DEBUG ('a', "Initializing stack register to 0x%x\n",
-           (numPages * PageSize) - 256);//(UserStacksAreaSize + 256?)
+           (numPages * PageSize) - 256 - 16);//(UserStacksAreaSize + 256?)
 
-    return (numPages * PageSize) - 256;
+    return (numPages * PageSize) - 256 - 16;
 }
 
 //----------------------------------------------------------------------
