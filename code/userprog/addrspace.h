@@ -31,7 +31,7 @@ class AddrSpace:public dontcopythis
     // stored in the file "executable"
     ~AddrSpace ();              // De-allocate an address space
 
-    int AllocateUserStack();
+    int AllocateUserStack(const int pos);
 
     void InitRegisters (void);  // Initialize user-level CPU registers,
     // before jumping to user code
@@ -51,6 +51,9 @@ class AddrSpace:public dontcopythis
     TranslationEntry * pageTable; // Page table
     unsigned int numPages;      // Number of pages in the page table
 };
+int FindI();
+void PrintI();
+int numClear();
 
 extern List AddrspaceList;
 

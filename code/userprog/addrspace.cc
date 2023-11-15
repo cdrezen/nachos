@@ -21,6 +21,12 @@
 #include "noff.h"
 #include "syscall.h"
 #include "new"
+#include "bitmap.h"
+
+
+static Semaphore *indice = new Semaphore("incre & decr", 1);
+static BitMap *bitmap = new BitMap(UserStacksAreaSize / 256);
+static Semaphore *bmap = new Semaphore("Bitmap",1);
 
 //----------------------------------------------------------------------
 // SwapHeader
@@ -177,15 +183,15 @@ AddrSpace::InitRegisters ()
            numPages * PageSize - 16);
 }
 
-int AddrSpace::AllocateUserStack()
+int AddrSpace::AllocateUserStack(const int pos)
 {
     //for (int i = USER_START_ADDRESS; i < USER_START_ADDRESS + UserStacksAreaSize; i++)
     //    machine->WriteRegister (i, 0);
 
     DEBUG ('a', "Initializing stack register to 0x%x\n",
-           (numPages * PageSize) - 256 - 16);//(UserStacksAreaSize + 256?)
+           (numPages * PageSize) - 256 *(pos+1) - 16);//(UserStacksAreaSize + 256?)
 
-    return (numPages * PageSize) - 256 - 16;
+    return (numPages * PageSize) - 256*(pos+1) - 16;
 }
 
 //----------------------------------------------------------------------
@@ -302,4 +308,29 @@ AddrSpace::RestoreState ()
 {
     machine->currentPageTable = pageTable;
     machine->currentPageTableSize = numPages;
+}
+
+int FindI(){
+    bmap->P();
+    int i = bitmap->Find();
+    bmap->V();
+    // if (i == -1){
+    //     i = (UserStacksAreaSize / 256) -1 ;
+    // }
+        // printf("\n stack  = %d\n",i);
+
+    return i;
+}
+
+void PrintI(){
+    bmap->P();
+    bitmap->Print();
+    bmap->V();
+}
+
+int numClear(){
+    bmap->P();
+    int res = bitmap->NumClear();
+    bmap->V();
+    return res;
 }

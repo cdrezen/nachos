@@ -196,11 +196,14 @@ void ExceptionHandler(ExceptionType which)
 
       DEBUG('t', "ThreadCreate f=%d, arg=%d.\n", f, arg);
 
-      do_ThreadCreate(f, arg);
+     if(do_ThreadCreate(f, arg) == -1){
+        printf("Thread non crée");
+        do_ThreadExit();
+      }
 
       break;
     }
-    case SC_ThreadExit:
+   case SC_ThreadExit:
     {
       do_ThreadExit();
       break;

@@ -1,8 +1,11 @@
 #include "userthread.h"
 #include "system.h"
 #include "synch.h"
+#include "addrspace.h"
 
 int stackPtr;
+static Semaphore *th = new Semaphore("t",1);
+static Semaphore *mutexNumThread = new Semaphore("mutexNumThread", 1);
 
 static void StartUserThread(void *schmurtz)
 {
@@ -10,7 +13,7 @@ static void StartUserThread(void *schmurtz)
 
     int f = args[0];
     int arg = args[1];
-
+    int pos = args[2];
     delete[] args;
 
     DEBUG('t', "StartUserThread   f ptr: %d     arg ptr: %d.\n", f, arg);
@@ -30,7 +33,8 @@ static void StartUserThread(void *schmurtz)
     // allocated the stack; but subtract off a bit, to make sure we don't
     // accidentally reference off the end!
     
-    stackPtr = currentThread->space->AllocateUserStack();
+    stackPtr = currentThread->space->AllocateUserStack(pos);
+            printf("\n stack  = %d\n",stackPtr);
 
     machine->WriteRegister (StackReg, stackPtr);
 
@@ -54,21 +58,36 @@ char name[8];
 
 int do_ThreadCreate(int f, int arg)
 {
+    // PrintI();
+    // printf("\n");
     DEBUG('t', "do_ThreadCreate    f ptr: %d     arg ptr: %d.\n", f, arg);
     
     sprintf(name, "thread%d", nameid++);  
-    Thread *t = new Thread(name);
-
-    if(!t) return -1;
-    
+    // th->P();
     schmurtz = new int[2];
     schmurtz[0] = f;
     schmurtz[1] = arg;
+    int pos = FindI();
+    if(pos == -1){
+        delete(schmurtz);
+        return -1;
+    }
+    schmurtz[2] = pos;
+    //mutexNumThread->P();
+    //mutexNumThread->V();
+   // printf("numThread = %d\n",t->space->nbUserThreads);
+//    th->V();
+    Thread *t = new Thread(name);
+    if(!t) return -1;
     t->space = currentThread->space;
+        // mutexNumThread->P();
+
     t->space->nbUserThreads++;
+        // mutexNumThread->V();
+
     t->Start(StartUserThread, schmurtz);
     currentThread->Yield();
-    
+
     return 0;
 }
 
@@ -77,6 +96,7 @@ void do_ThreadExit()
     Thread* t = currentThread;
 
     t->space->nbUserThreads--;
+
     DEBUG('t', "thread exit: nbUserThreads=%d\n", t->space->nbUserThreads);//
 
     if (DebugIsEnabled('t'))
