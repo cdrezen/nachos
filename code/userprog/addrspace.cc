@@ -130,7 +130,7 @@ AddrSpace::AddrSpace (OpenFile * executable)
 
           ReadAtVirtual(executable, noffH.initData.virtualAddr, noffH.initData.size, noffH.initData.inFileAddr, pageTable, numPages);
       }
-           // executable->ReadAtVirtual (executable, noffH.initData.virtualAddr, noffH.initData.size, noffH.initData.size,  noffH.initData.inFileAddr, pageTable, numPages);
+      
     DEBUG ('a', "Area for stacks at 0x%x, size 0x%x\n",
            size - UserStacksAreaSize, UserStacksAreaSize);
 
@@ -210,7 +210,7 @@ AddrSpace::ReadAtVirtual(OpenFile *executable, int virtualaddr, int numBytes, in
     machine->currentPageTableSize = numPages;
 
     for(int i = 0; i < numBytes; i++){
-        machine->WriteMem(virtualaddr, 1, buf[i]);
+        machine->WriteMem(virtualaddr+i, 1, buf[i]);
     }
 
     machine->currentPageTable = oldPageTable;
