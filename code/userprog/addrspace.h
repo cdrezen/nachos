@@ -33,6 +33,10 @@ class AddrSpace:public dontcopythis
 
     int AllocateUserStack(const int pos);
 
+    static void ReadAtVirtual(OpenFile *executable, int virtualaddr, 
+                              int numBytes, int position, TranslationEntry *pageTable,
+                              unsigned numPages);
+
     void InitRegisters (void);  // Initialize user-level CPU registers,
     // before jumping to user code
 

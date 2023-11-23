@@ -5,6 +5,7 @@
     "files.associations": {
         "*.embeddedhtml": "html",
         "*.inc": "php",
-        "cstdio": "cpp"
+        "cstdio": "cpp",
+        "__node_handle": "cpp"
     }
 }

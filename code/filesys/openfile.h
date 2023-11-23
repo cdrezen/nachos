@@ -35,6 +35,7 @@ class OpenFile:public dontcopythis {
                 Lseek(file, position, SEEK_SET);
                 return ReadPartial(file, into, numBytes);
                 }
+
     int WriteAt(const void *from, int numBytes, int position) {
                 Lseek(file, position, SEEK_SET);
                 WriteFile(file, from, numBytes);
@@ -80,10 +81,6 @@ class OpenFile:public dontcopythis {
                                         // Read/write bytes from the file,
                                         // bypassing the implicit position.
                                         // Return the # actually read/written.
-
-    static void ReadAtVirtual(OpenFile *executable, int virtualaddr, 
-                              int numBytes, int position, TranslationEntry *pageTable,
-                              unsigned numPages);
                               
     int WriteAt(const void *from, int numBytes, int position);
 

@@ -143,26 +143,6 @@ OpenFile::ReadAt(void *into, int numBytes, int position)
     return numBytes;
 }
 
-static void
-OpenFile::ReadAtVirtual(OpenFile *executable, int virtualaddr, int numBytes, int position,
-                        TranslationEntry *pageTable, unsigned numPages)
-{
-    char * buf = new char[numBytes];
-    executable->ReadAt(buf, numBytes, position);
-    for(int i = 0; i < numBytes; i++){
-        machine->WriteMem(pagetable->physAddr, 1, buf[i]);
-    }
-    
-    delete [] buf;
-    // executable->WriteAt(position, numBytes, )
-    
-
-    //ReadAt(buf, ?, position?)
-    //for ... WriteMem(, buf)
-    //delete buf
-    return;
-}
-
 int
 OpenFile::WriteAt(const void *from, int numBytes, int position)
 {
