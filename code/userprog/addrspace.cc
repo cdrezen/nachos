@@ -127,7 +127,7 @@ AddrSpace::AddrSpace (OpenFile * executable)
                                [noffH.initData.virtualAddr]),
                               noffH.initData.size, noffH.initData.inFileAddr);
       }
-
+           // executable->ReadAtVirtual (executable, noffH.initData.virtualAddr, noffH.initData.size, noffH.initData.size,  noffH.initData.inFileAddr, pageTable, numPages);
     DEBUG ('a', "Area for stacks at 0x%x, size 0x%x\n",
            size - UserStacksAreaSize, UserStacksAreaSize);
 

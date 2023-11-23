@@ -80,6 +80,11 @@ class OpenFile:public dontcopythis {
                                         // Read/write bytes from the file,
                                         // bypassing the implicit position.
                                         // Return the # actually read/written.
+
+    static void ReadAtVirtual(OpenFile *executable, int virtualaddr, 
+                              int numBytes, int position, TranslationEntry *pageTable,
+                              unsigned numPages);
+                              
     int WriteAt(const void *from, int numBytes, int position);
 
     int Length(void)                    // Return the number of bytes in the

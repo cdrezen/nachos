@@ -4,8 +4,8 @@
 #include "addrspace.h"
 
 int stackPtr;
-static Semaphore *th = new Semaphore("t",1);
-static Semaphore *mutexNumThread = new Semaphore("mutexNumThread", 1);
+// static Semaphore *th = new Semaphore("t",1);
+// static Semaphore *mutexNumThread = new Semaphore("mutexNumThread", 1);
 
 static void StartUserThread(void *schmurtz)
 {
