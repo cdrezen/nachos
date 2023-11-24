@@ -90,20 +90,17 @@ void ThreadLent(void *arg)
 int main ()
 {
     unsigned nom;
-    const unsigned NB_THREAD = 3;
-    unsigned noms[NB_THREAD];
+    const unsigned NB_THREAD = 4;
 
     for(nom = BOGDANOF; nom < BOGDANOF + NB_THREAD; nom++)
     {
-      noms[nom - BOGDANOF] = nom;
-      monprintf("%d\n", nom - BOGDANOF);//
-      ThreadCreate(ThreadLent, (void*) noms[nom - BOGDANOF]);
+      ThreadCreate(ThreadLent, (void*) nom);
       //PutString("ici le main.\n");
     }
 
     PutString("main: plus rien a faire.\n");
 
-    while(1);
+    //while(1);
 
     ThreadExit();
 }
