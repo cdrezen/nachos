@@ -101,7 +101,9 @@ AddrSpace::AddrSpace (OpenFile * executable)
     pageTable = new TranslationEntry[numPages];
     for (i = 0; i < numPages; i++)
       {
-          pageTable[i].physicalPage = i;        // for now, phys page # = virtual page #
+
+          pageTable[i].physicalPage = i+1;        // now, phys page             i + 1               # = virtual page #  //!\\ 
+
           pageTable[i].valid = TRUE;
           pageTable[i].use = FALSE;
           pageTable[i].dirty = FALSE;

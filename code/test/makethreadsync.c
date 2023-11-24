@@ -73,12 +73,12 @@ int main ()
     sem_t_init(&consomation_fourchette,2);
     sem_t_init(&io_sem, 1);
 
-    //ThreadCreate(fabricant_fourchettes, &fabricant);
+    ThreadCreate(fabricant_fourchettes, &fabricant);
     ThreadCreate(philosophe, &nietzsche);
     ThreadCreate(philosophe, &aristote);
 
     //
-    fabricant_fourchettes(&fabricant);
+    //fabricant_fourchettes(&fabricant);
 
     ThreadExit();
 }

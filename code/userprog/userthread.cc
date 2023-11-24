@@ -56,7 +56,7 @@ int do_ThreadCreate(int f, int arg)
     DEBUG('t', "do_ThreadCreate    f ptr: %d     arg ptr: %d.\n", f, arg);
     
     sprintf(name, "thread%d", nameid++);  
-    schmurtz = new int[2];
+    schmurtz = new int[3];
     schmurtz[0] = f;
     schmurtz[1] = arg;
     int pos = synchFind();

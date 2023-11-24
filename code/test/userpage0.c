@@ -10,6 +10,7 @@ int main()
 {
     PutChar('o');
     PutString("\nbob");
-    //ThreadCreate(SimpleThread, 'a');
+    ThreadCreate(SimpleThread, 'a');
+    ThreadCreate(SimpleThread, 'b');
     //ThreadExit();
 }
