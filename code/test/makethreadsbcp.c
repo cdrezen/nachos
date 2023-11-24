@@ -58,8 +58,8 @@ void uintTo8Letters(unsigned val, char* str)
 //on a du faire des threads plus 'gourmand' pour qu'ils puissent 'entrer en conflit'
 void ThreadLent(void *arg)
 {
-    unsigned int id = (int)arg;     
-    char* str = "je suis le thread 'aabbccdd'.\n";
+    unsigned id = (unsigned)arg;     
+    char str[] = "je suis le thread 'aabbccdd'.\n";
     char* nom = str+19;
     char bjr[8];
 
@@ -81,6 +81,8 @@ void ThreadLent(void *arg)
     str[8] = ' ';
     str[9] = '@'; 
 
+    //uintTo8Letters(id, nom);
+
     PutString(str);
 
     ThreadExit();
@@ -91,10 +93,12 @@ int main ()
 {
     unsigned nom;
     const unsigned NB_THREAD = 4;
+    //unsigned noms[NB_THREAD];
 
     for(nom = BOGDANOF; nom < BOGDANOF + NB_THREAD; nom++)
     {
-      ThreadCreate(ThreadLent, (void*) nom);
+      //noms[nom - BOGDANOF] = nom;
+      ThreadCreate(ThreadLent, nom);
       //PutString("ici le main.\n");
     }
 
