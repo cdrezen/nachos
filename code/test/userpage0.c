@@ -12,5 +12,5 @@ int main()
     PutString("\nbob");
     ThreadCreate(SimpleThread, 'a');
     ThreadCreate(SimpleThread, 'b');
-    //ThreadExit();
+    ThreadExit();
 }

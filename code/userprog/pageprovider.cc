@@ -1,11 +1,5 @@
-class PageProvider
-{
-private:
-    /* data */
-public:
-    PageProvider(/* args */);
-    ~PageProvider();
-};
+#include "pageprovider.h"
+
 
 PageProvider::PageProvider(/* args */)
 {
