@@ -104,7 +104,7 @@ int main ()
 
     PutString("main: plus rien a faire.\n");
 
-    //while(1);
+    //while(1); 
 
     ThreadExit();
 }
