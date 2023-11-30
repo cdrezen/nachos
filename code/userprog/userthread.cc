@@ -63,7 +63,7 @@ int do_ThreadCreate(int f, int arg)
     if(!t) return -1;
     t->space = currentThread->space;
     t->space->nbUserThreads++;
-    int pos = t->space->synchFind();
+    int pos = synchFind();
     if(pos == -1){
         delete(schmurtz);
         return -1;
@@ -97,7 +97,7 @@ void do_ThreadExit()
     }//rqrzrqzrzqrq
     else 
     {
-        t->space->deleteBitMap();
+        deleteBitMap();
         delete t->space;
         interrupt->Powerdown();
     } 

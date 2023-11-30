@@ -1,14 +1,16 @@
-#include "system.h"
-#include "addrspace.h"
-#include "noff.h"
-#include "syscall.h"
 #include "bitmap.h"
+#include "machine.h"
+#include "synch.h"
 
 class PageProvider
 {
 private:
-    /* data */
+    BitMap* bitmap;
+    Lock* lock;
 public:
     PageProvider(/* args */);
     ~PageProvider();
+    int GetEmptyPage();
+    void ReleasePage(int index);
+    int NumAvailPage();
 };

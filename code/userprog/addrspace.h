@@ -18,17 +18,12 @@
 #include "translate.h"
 #include "noff.h"
 #include "list.h"
-#include "bitmap.h"
-
-class Semaphore;
 
 #define UserStacksAreaSize		1024	// increase this as necessary!
 
 class AddrSpace:public dontcopythis
 {
   public:
-  BitMap *bitmap;
-  Semaphore *bmap;
     unsigned int nbUserThreads = 1;
 
     AddrSpace (OpenFile * executable); // Create an address space,
@@ -37,6 +32,10 @@ class AddrSpace:public dontcopythis
     ~AddrSpace ();              // De-allocate an address space
 
     int AllocateUserStack(const int pos);
+
+    static void ReadAtVirtual(OpenFile *executable, int virtualaddr, 
+                              int numBytes, int position, TranslationEntry *pageTable,
+                              unsigned numPages);
 
     void InitRegisters (void);  // Initialize user-level CPU registers,
     // before jumping to user code
@@ -49,8 +48,6 @@ class AddrSpace:public dontcopythis
                     unsigned blocksize);
                                 // Dump program layout as SVG
     unsigned NumPages(void) { return numPages; }
-    int synchFind();
-    void deleteBitMap();
 
   private:
     NoffHeader noffH;           // Program layout
@@ -58,9 +55,9 @@ class AddrSpace:public dontcopythis
     TranslationEntry * pageTable; // Page table
     unsigned int numPages;      // Number of pages in the page table
 };
-
+int synchFind();
+void deleteBitMap();
 
 extern List AddrspaceList;
-
 
 #endif // ADDRSPACE_H

@@ -37,6 +37,8 @@ Machine *machine;		// user program memory and registers
 ConsoleDriver *consoledriver;
 //TD2.IV
 UserSync* usync;
+//TD3
+PageProvider* pageprovider;
 #endif
 
 #ifdef NETWORK

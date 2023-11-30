@@ -22,7 +22,10 @@
 #include "syscall.h"
 #include "new"
 #include "bitmap.h"
-#include "synch.h"
+
+
+static BitMap *bitmap = new BitMap(UserStacksAreaSize / 256);
+static Semaphore *bmap = new Semaphore("Bitmap",1);
 
 //----------------------------------------------------------------------
 // SwapHeader
@@ -70,9 +73,6 @@ List AddrSpaceList;
 
 AddrSpace::AddrSpace (OpenFile * executable)
 {
-     AddrSpace::bitmap = new BitMap(UserStacksAreaSize / 256);
-     AddrSpace::bmap = new Semaphore("Bitmap",1);
-
     unsigned int i, size;
 
     executable->ReadAt (&noffH, sizeof (noffH), 0);
@@ -101,7 +101,9 @@ AddrSpace::AddrSpace (OpenFile * executable)
     pageTable = new TranslationEntry[numPages];
     for (i = 0; i < numPages; i++)
       {
-          pageTable[i].physicalPage = i;        // for now, phys page # = virtual page #
+
+          pageTable[i].physicalPage = i+1;        // now, phys page             i + 1               # = virtual page #  //!\\ 
+
           pageTable[i].valid = TRUE;
           pageTable[i].use = FALSE;
           pageTable[i].dirty = FALSE;
@@ -115,19 +117,22 @@ AddrSpace::AddrSpace (OpenFile * executable)
       {
           DEBUG ('a', "Initializing code segment, at 0x%x, size 0x%x\n",
                  noffH.code.virtualAddr, noffH.code.size);
-          executable->ReadAt (&(machine->mainMemory[noffH.code.virtualAddr]),
-                              noffH.code.size, noffH.code.inFileAddr);
+          //executable->ReadAt (&(machine->mainMemory[noffH.code.virtualAddr]),
+          //                    noffH.code.size, noffH.code.inFileAddr);
+          ReadAtVirtual(executable, noffH.code.virtualAddr, noffH.code.size, noffH.code.inFileAddr, pageTable, (unsigned)numPages);
       }
     if (noffH.initData.size > 0)
       {
           DEBUG ('a', "Initializing data segment, at 0x%x, size 0x%x\n",
                  noffH.initData.virtualAddr, noffH.initData.size);
-          executable->ReadAt (&
+          /* executable->ReadAt (&
                               (machine->mainMemory
                                [noffH.initData.virtualAddr]),
-                              noffH.initData.size, noffH.initData.inFileAddr);
+                              noffH.initData.size, noffH.initData.inFileAddr); */
+
+          ReadAtVirtual(executable, noffH.initData.virtualAddr, noffH.initData.size, noffH.initData.inFileAddr, pageTable, numPages);
       }
-           // executable->ReadAtVirtual (executable, noffH.initData.virtualAddr, noffH.initData.size, noffH.initData.size,  noffH.initData.inFileAddr, pageTable, numPages);
+      
     DEBUG ('a', "Area for stacks at 0x%x, size 0x%x\n",
            size - UserStacksAreaSize, UserStacksAreaSize);
 
@@ -191,6 +196,36 @@ int AddrSpace::AllocateUserStack(const int pos)
            (numPages * PageSize) - 256 *(pos+1) - 16);//(UserStacksAreaSize + 256?)
 
     return (numPages * PageSize) - 256*(pos+1) - 16;
+}
+
+void
+AddrSpace::ReadAtVirtual(OpenFile *executable, int virtualaddr, int numBytes, int position,
+                        TranslationEntry *pageTable, unsigned numPages)
+{
+    char * buf = new char[numBytes];
+    executable->ReadAt(buf, numBytes, position);
+
+    TranslationEntry* oldPageTable = machine->currentPageTable;
+    unsigned oldPageTableSize = machine->currentPageTableSize;
+
+    machine->currentPageTable = pageTable;
+    machine->currentPageTableSize = numPages;
+
+    for(int i = 0; i < numBytes; i++){
+        machine->WriteMem(virtualaddr+i, 1, buf[i]);
+    }
+
+    machine->currentPageTable = oldPageTable;
+    machine->currentPageTableSize = oldPageTableSize;
+    
+    delete [] buf;
+    // executable->WriteAt(position, numBytes, )
+    
+
+    //ReadAt(buf, ?, position?)
+    //for ... WriteMem(, buf)
+    //delete buf
+    return;
 }
 
 //----------------------------------------------------------------------
@@ -310,13 +345,13 @@ AddrSpace::RestoreState ()
 }
 
 //Fonction qui rajoute des sémaphores aux méthodes de bitmap.h
-int AddrSpace::synchFind(){
+int synchFind(){
     bmap->P();
     int i = bitmap->Find();
     bmap->V();
     return i;
 }
 
-void AddrSpace::deleteBitMap(){
-    delete bitmap;
+void deleteBitMap(){
+    delete(bitmap);
 }

@@ -39,6 +39,9 @@ const int MAX_STRING_SIZE = 3500;
 //TD2
 #include "usersync.h"
 extern UserSync *usync;
+//TD3
+#include "pageprovider.h"
+extern PageProvider* pageprovider;
 #endif
 
 #ifdef FILESYS_NEEDED           // FILESYS or FILESYS_STUB

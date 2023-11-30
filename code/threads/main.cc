@@ -127,6 +127,9 @@ main (int argc, char **argv)
                 consoledriver = new ConsoleDriver(NULL, NULL);
                 //TD2.IV
                 usync = new UserSync();
+                //TD3
+                pageprovider = new PageProvider();
+
 
                 StartProcess (*(argv + 1));
                 argCount = 2;
