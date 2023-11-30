@@ -26,6 +26,9 @@ class AddrSpace:public dontcopythis
   public:
     unsigned int nbUserThreads = 1;
 
+   BitMap *bitmap;
+   Semaphore *bmap;
+
     AddrSpace (OpenFile * executable); // Create an address space,
     // initializing it with the program
     // stored in the file "executable"
@@ -48,6 +51,10 @@ class AddrSpace:public dontcopythis
                     unsigned blocksize);
                                 // Dump program layout as SVG
     unsigned NumPages(void) { return numPages; }
+
+    int synchFind();
+    void deleteBitMap();
+
 
   private:
     NoffHeader noffH;           // Program layout

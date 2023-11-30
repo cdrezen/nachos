@@ -27,6 +27,8 @@
 static BitMap *bitmap = new BitMap(UserStacksAreaSize / 256);
 static Semaphore *bmap = new Semaphore("Bitmap",1);
 
+
+
 //----------------------------------------------------------------------
 // SwapHeader
 //      Do little endian to big endian conversion on the bytes in the
@@ -73,6 +75,9 @@ List AddrSpaceList;
 
 AddrSpace::AddrSpace (OpenFile * executable)
 {
+    AddrSpace::bitmap = new BitMap(UserStacksAreaSize / 256);
+     AddrSpace::bmap = new Semaphore("Bitmap",1);
+
     unsigned int i, size;
 
     executable->ReadAt (&noffH, sizeof (noffH), 0);
