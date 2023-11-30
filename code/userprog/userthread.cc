@@ -56,19 +56,19 @@ int do_ThreadCreate(int f, int arg)
     DEBUG('t', "do_ThreadCreate    f ptr: %d     arg ptr: %d.\n", f, arg);
     
     sprintf(name, "thread%d", nameid++);  
-    schmurtz = new int[3];
+    schmurtz = new int[2];
     schmurtz[0] = f;
     schmurtz[1] = arg;
-    int pos = synchFind();
+    Thread *t = new Thread(name);
+    if(!t) return -1;
+    t->space = currentThread->space;
+    t->space->nbUserThreads++;
+    int pos = t->space->synchFind();
     if(pos == -1){
         delete(schmurtz);
         return -1;
     }
     schmurtz[2] = pos;
-    Thread *t = new Thread(name);
-    if(!t) return -1;
-    t->space = currentThread->space;
-    t->space->nbUserThreads++;
     t->Start(StartUserThread, schmurtz);
     currentThread->Yield();
 
@@ -94,11 +94,11 @@ void do_ThreadExit()
     {
         //clear(pos)
         t->Finish();//suprimer bitmap
-    }
+    }//rqrzrqzrzqrq
     else 
     {
-        deleteBitMap();
+        t->space->deleteBitMap();
         delete t->space;
         interrupt->Powerdown();
-    }
+    } 
 }
