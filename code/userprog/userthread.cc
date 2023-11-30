@@ -98,7 +98,7 @@ void do_ThreadExit()
     }
     else 
     {
-        deleteBitMap();
+        t->space->deleteBitMap();
         delete t->space;
         interrupt->Powerdown();
     }

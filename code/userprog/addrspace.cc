@@ -20,13 +20,6 @@
 #include "addrspace.h"
 #include "noff.h"
 #include "syscall.h"
-#include "new"
-#include "bitmap.h"
-
-
-static BitMap *bitmap = new BitMap(UserStacksAreaSize / 256);
-static Semaphore *bmap = new Semaphore("Bitmap",1);
-
 
 
 //----------------------------------------------------------------------
@@ -350,13 +343,13 @@ AddrSpace::RestoreState ()
 }
 
 //Fonction qui rajoute des sémaphores aux méthodes de bitmap.h
-int synchFind(){
+int AddrSpace::synchFind(){
     bmap->P();
     int i = bitmap->Find();
     bmap->V();
     return i;
 }
 
-void deleteBitMap(){
-    delete(bitmap);
+void AddrSpace::deleteBitMap(){
+    delete bitmap;
 }

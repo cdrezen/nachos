@@ -18,6 +18,9 @@
 #include "translate.h"
 #include "noff.h"
 #include "list.h"
+#include "bitmap.h"
+
+class Semaphore;
 
 #define UserStacksAreaSize		1024	// increase this as necessary!
 
@@ -62,8 +65,6 @@ class AddrSpace:public dontcopythis
     TranslationEntry * pageTable; // Page table
     unsigned int numPages;      // Number of pages in the page table
 };
-int synchFind();
-void deleteBitMap();
 
 extern List AddrspaceList;
 
