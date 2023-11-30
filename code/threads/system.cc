@@ -240,6 +240,7 @@ Cleanup ()
     //TD1.IV
     if(consoledriver) delete consoledriver;   
     if(usync) delete usync; //TD2
+    if(pageprovider) delete pageprovider; //TD3
 #endif
 
 #ifdef FILESYS_NEEDED

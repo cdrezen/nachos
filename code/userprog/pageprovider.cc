@@ -19,8 +19,10 @@ int PageProvider::GetEmptyPage()
     lock->Acquire();
 
     int res = bitmap->Find();
-    
-    if(res) memset(0, machine->mainMemory[res * PageSize], sizeof(int));
+
+    if(!res) { lock->Release(); return res; }
+
+    memset(machine->mainMemory+(res * PageSize), 0, PageSize);
 
     lock->Release();
     

@@ -93,15 +93,20 @@ AddrSpace::AddrSpace (OpenFile * executable)
     if (numPages > NumPhysPages)
             throw std::bad_alloc();
 
+    ASSERT_MSG(numPages <= pageprovider->NumAvailPage(), "Pas assez de pages disponible.");
+
     DEBUG ('a', "Initializing address space, num pages %d, total size 0x%x\n",
            numPages, size);
 // first, set up the translation
     pageTable = new TranslationEntry[numPages];
     for (i = 0; i < numPages; i++)
       {
+          
+          int page = pageprovider->GetEmptyPage();
+          ASSERT_MSG(page != -1, "Pas assez de pages disponible.");
 
-          pageTable[i].physicalPage = i+1;        // now, phys page             i + 1               # = virtual page #  //!\\ 
-
+          pageTable[i].physicalPage = page;//i+1;        // now, phys page             i + 1               # = virtual page #  //!\\ 
+          
           pageTable[i].valid = TRUE;
           pageTable[i].use = FALSE;
           pageTable[i].dirty = FALSE;
@@ -146,6 +151,10 @@ AddrSpace::AddrSpace (OpenFile * executable)
 
 AddrSpace::~AddrSpace ()
 {
+  for (int i = 0; i < numPages; i++){
+    pageprovider->ReleasePage(pageTable[i].physicalPage);
+  }
+
   delete [] pageTable;
   pageTable = NULL;
 
