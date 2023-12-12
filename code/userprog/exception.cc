@@ -26,8 +26,6 @@
 #include "syscall.h"
 //TD2.I.4
 #include "userthread.h"
-//TD3
-#include "forkexec.h"
 
 //----------------------------------------------------------------------
 // UpdatePC : Increments the Program Counter register in order to resume
@@ -97,8 +95,16 @@ void ExceptionHandler(ExceptionType which)
       //snprintf(str, 51, "programme termine, code=%d val retour=%d.\n", exit, res);
       //consoledriver->PutString(str);
       DEBUG('p', "programme termine, code=%d val retour=%d.\n", exit, res);
+
+      int nbProc = forkexec->getNbProc() - 1;
+      forkexec->setNbProc(nbProc);
+
+      delete currentThread->space;
       
-      interrupt->Powerdown(); // a modifier si on voulais faire autre chose ensuite comme executer un autre programme
+      if(nbProc == 1)
+      {
+        interrupt->Powerdown(); // a modifier si on voulais faire autre chose ensuite comme executer un autre programme
+      }
       break;
     }
     case SC_PutChar:
@@ -207,11 +213,19 @@ void ExceptionHandler(ExceptionType which)
     }
    case SC_ThreadExit:
     {
+      /* int nbProc = forkexec->getNbProc() - 1;
+      forkexec->setNbProc(nbProc);
+
+      delete currentThread->space;
+      
+      if(nbProc == 1)
+      { */
       do_ThreadExit();
       break;
     }
     case SC_P:
     {
+      
       int id = machine->ReadRegister(4); 
       int init = machine->ReadRegister(5);
       machine->WriteRegister(2, usync->P(id, init));
@@ -232,7 +246,7 @@ void ExceptionHandler(ExceptionType which)
 
       DEBUG('t', "ForkExec s=%s.\n", filename);
 
-      do_ForkExec(filename);
+      forkexec->do_ForkExec(filename);
 
       delete filename;
 

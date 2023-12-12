@@ -42,6 +42,8 @@ extern UserSync *usync;
 //TD3
 #include "pageprovider.h"
 extern PageProvider* pageprovider;
+#include "forkexec.h"
+extern ForkExec *forkexec;
 #endif
 
 #ifdef FILESYS_NEEDED           // FILESYS or FILESYS_STUB

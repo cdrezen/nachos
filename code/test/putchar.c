@@ -14,5 +14,6 @@ int main()
 {
     print('a', 4);
     //Halt(); -> return 1 à la place -> pas d'appel sys 1
+    //while(1);
     return 67;
 }

@@ -172,7 +172,7 @@ void ThreadExit(void);
  */
 
 #pragma region TD2
-#define FORCETHREADEXIT_FULLMACRO
+//#define FORCETHREADEXIT_FULLMACRO
 #ifdef FORCETHREADEXIT_FULLMACRO
 
 typedef void (*func)(void* arg);

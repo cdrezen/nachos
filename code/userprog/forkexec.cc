@@ -1,10 +1,32 @@
-#include "userthread.h"
 #include "system.h"
-#include "synch.h"
+#ifndef SYSTEM_H
+    #include "forkexec.h"
+#endif
 #include "addrspace.h"
 
+ForkExec::ForkExec()
+{
+    lock = new Lock("proc");
+}
 
-static void StartUserProc(void * arg)
+ForkExec::~ForkExec()
+{
+    
+}
+
+int ForkExec::getNbProc()
+{
+    //synchro?
+    return nbProc;
+}
+
+void ForkExec::setNbProc(int value)
+{
+    //synchro?
+    nbProc = value;
+}
+
+void ForkExec::StartUserProc(void * arg)
 {
     DEBUG('t', "StartUserProc.\n");
     
@@ -19,7 +41,7 @@ static void StartUserProc(void * arg)
 
 }
 
-int do_ForkExec(char* filename)
+int ForkExec::do_ForkExec(char* filename)
 {
     OpenFile *executable = fileSystem->Open (filename);
     AddrSpace *space;
@@ -32,13 +54,15 @@ int do_ForkExec(char* filename)
           ClearColor (stdout);
           return -1;
       }
-    space = new AddrSpace (executable);
+    space = new AddrSpace(executable);
 
     delete executable;		// close file
 
     Thread* t = new Thread("proc");
     t->space = space;
     t->Start(StartUserProc, NULL);
+    
+    nbProc++;
 
     return 0;
 }

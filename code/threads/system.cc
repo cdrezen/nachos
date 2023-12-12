@@ -39,6 +39,7 @@ ConsoleDriver *consoledriver;
 UserSync* usync;
 //TD3
 PageProvider* pageprovider;
+ForkExec* forkexec;
 #endif
 
 #ifdef NETWORK

@@ -129,6 +129,7 @@ main (int argc, char **argv)
                 usync = new UserSync();
                 //TD3
                 pageprovider = new PageProvider();
+                forkexec = new ForkExec();
 
 
                 StartProcess (*(argv + 1));
