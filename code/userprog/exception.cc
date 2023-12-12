@@ -26,6 +26,8 @@
 #include "syscall.h"
 //TD2.I.4
 #include "userthread.h"
+//TD3
+#include "forkexec.h"
 
 //----------------------------------------------------------------------
 // UpdatePC : Increments the Program Counter register in order to resume
@@ -219,6 +221,21 @@ void ExceptionHandler(ExceptionType which)
     {
       int id = machine->ReadRegister(4); 
       usync->V(id);
+      break;
+    }
+    case SC_ForkExec:
+    {
+      int from = machine->ReadRegister(4);
+      int size = MAX_STRING_SIZE;
+      char *filename = new char[size];
+      machine->copyStringFromMachine(from, filename, size);
+
+      DEBUG('t', "ForkExec s=%s.\n", filename);
+
+      do_ForkExec(filename);
+
+      delete filename;
+
       break;
     }
 

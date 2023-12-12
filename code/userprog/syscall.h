@@ -49,6 +49,7 @@
 //TD2.IV
 #define SC_P            19
 #define SC_V            20
+#define SC_ForkExec     21
 
 #ifdef IN_USER_MODE
 
@@ -170,6 +171,7 @@ void ThreadExit(void);
  * au lieu de lancer un thread avec (f, arg) on lance un thread avec (g={.f(.arg); ThreadExit()}, [f, arg])
  */
 
+#pragma region TD2
 #define FORCETHREADEXIT_FULLMACRO
 #ifdef FORCETHREADEXIT_FULLMACRO
 
@@ -221,6 +223,10 @@ void sem_t_init(sem_t* sem, int val) { if(!sem->id || sem->id < 0) { sem->id = P
 
 #define P(sem) P(sem->id, 0)
 #define V(sem) V(sem->id)
+
+#pragma endregion
+
+int ForkExec(const char *s);
 
 #endif // IN_USER_MODE
 
