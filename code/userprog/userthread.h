@@ -6,7 +6,7 @@
 //UserThread();
 //~UserThread(); // clean up
 
-extern int do_ThreadCreate(int f, int arg);
+extern int do_ThreadCreate(int f, int arg, int exit_address);
 static void StartUserThread(void *schmurtz);
 extern void do_ThreadExit(void);
 

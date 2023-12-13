@@ -13,7 +13,8 @@ static void StartUserThread(void *schmurtz)
 
     int f = args[0];
     int arg = args[1];
-    int pos = args[2];
+    int exit = args[2];
+    int pos = args[3];
     delete[] args;
 
     DEBUG('t', "StartUserThread   f ptr: %d     arg ptr: %d.\n", f, arg);
@@ -24,6 +25,7 @@ static void StartUserThread(void *schmurtz)
     // Initial program counter -- must be location of the __start function
     machine->WriteRegister (PCReg, f);
     machine->WriteRegister (4, arg);
+    machine->WriteRegister (RetAddrReg, exit);
 
     // Need to also tell MIPS where next instruction is, because
     // of branch delay possibility
@@ -50,26 +52,31 @@ int nameid = 1;
 int* schmurtz;
 char name[8];
 
-int do_ThreadCreate(int f, int arg)
+int do_ThreadCreate(int f, int arg, int exit_address)
 {
 
     DEBUG('t', "do_ThreadCreate    f ptr: %d     arg ptr: %d.\n", f, arg);
     
     sprintf(name, "thread%d", nameid++);  
-    schmurtz = new int[2];
+    Thread *t = new Thread(name);
+
+    if(!t) return -1;
+
+    schmurtz = new int[4];
     schmurtz[0] = f;
     schmurtz[1] = arg;
-    Thread *t = new Thread(name);
-    if(!t) return -1;
+    schmurtz[2] = exit_address;
+
     t->space = currentThread->space;
-    t->space->nbUserThreads++;
     int pos = t->space->synchFind();
 
     if(pos == -1){
-        delete(schmurtz);
+        delete[] schmurtz;
         return -1;
     }
-    schmurtz[2] = pos;
+
+    schmurtz[3] = pos;
+    t->space->nbUserThreads++;
     t->Start(StartUserThread, schmurtz);
     currentThread->Yield();
 
@@ -93,13 +100,13 @@ void do_ThreadExit()
 
     if(t->space->nbUserThreads > 0)
     {
-        //clear(pos)
-        t->Finish();//suprimer bitmap
+        t->space->FreeUserStack(machine->ReadRegister(StackReg));//clear(pos)
+        t->Finish();
     }
-    else 
+    else
     {
-        t->space->deleteBitMap();
+        bool isChild = t->space->isChild;
         delete t->space;
-        interrupt->Powerdown();
+        if(!isChild) interrupt->Powerdown();
     }
 }

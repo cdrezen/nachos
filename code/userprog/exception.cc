@@ -201,13 +201,11 @@ void ExceptionHandler(ExceptionType which)
     {
       int f = machine->ReadRegister(4);   // arg0
       int arg = machine->ReadRegister(5); // arg1
+      int exit_address = machine->ReadRegister(6); // addresse de ThreadExit
 
-      DEBUG('t', "ThreadCreate f=%d, arg=%d.\n", f, arg);
+      DEBUG('t', "ThreadCreate f=%d, arg=%d exit_address=%d.\n", f, arg, exit_address);
 
-     if(do_ThreadCreate(f, arg) == -1){
-        printf("Thread non crée");
-        do_ThreadExit();
-      }
+     if(do_ThreadCreate(f, arg, exit_address) == -1) printf("Thread non crée");
 
       break;
     }

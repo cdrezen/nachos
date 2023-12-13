@@ -28,6 +28,7 @@ class AddrSpace:public dontcopythis
 {
   public:
     unsigned int nbUserThreads = 1;
+    bool isChild = false;
 
    BitMap *bitmap;
    Semaphore *bmap;
@@ -38,6 +39,7 @@ class AddrSpace:public dontcopythis
     ~AddrSpace ();              // De-allocate an address space
 
     int AllocateUserStack(const int pos);
+    void FreeUserStack(const int stackPtr);
 
     static void ReadAtVirtual(OpenFile *executable, int virtualaddr, 
                               int numBytes, int position, TranslationEntry *pageTable,

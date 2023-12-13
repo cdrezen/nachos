@@ -60,9 +60,10 @@ int ForkExec::do_ForkExec(char* filename)
 
     Thread* t = new Thread("proc");
     t->space = space;
+    t->space->isChild = true;
     t->Start(StartUserProc, NULL);
     
-    nbProc++;
+    //nbProc++;
 
     return 0;
 }

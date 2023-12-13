@@ -6,14 +6,16 @@
 void SimpleThread()
 {
     PutString("je suis un thread\n");
-    ThreadExit();
+    //ThreadExit();
 }
 
 int main ()
 {
     ThreadCreate(SimpleThread, 0);
+    ThreadCreate(SimpleThread, 0);
     PutString("ici le main.\n");
-    ThreadCreate(SimpleThread, 0);
-    ThreadCreate(SimpleThread, 0);
-    ThreadExit();
+    //ThreadCreate(SimpleThread, 0);
+    //ThreadCreate(SimpleThread, 0);
+    //while(1);
+    //ThreadExit();
 }
