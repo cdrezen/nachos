@@ -28,6 +28,7 @@ class AddrSpace:public dontcopythis
 {
   public:
     unsigned int nbUserThreads = 1;
+    //static unsigned int nbAllThreads = 1;
     bool isChild = false;
 
    BitMap *bitmap;

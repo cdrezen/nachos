@@ -157,6 +157,7 @@ AddrSpace::~AddrSpace ()
 
   delete [] pageTable;
   pageTable = NULL;
+  machine->currentPageTable = NULL;
   delete bitmap;
 
   AddrSpaceList.Remove(this);
@@ -197,9 +198,7 @@ AddrSpace::InitRegisters ()
 
 int AddrSpace::AllocateUserStack(const int pos)
 {
-    DEBUG ('a', "Initializing stack register to 0x%x\n",
-           (numPages * PageSize) - 256 *(pos+1) - 16);
-    printf("alloc? %d\n", pos);
+    DEBUG ('a', "Initializing stack register to 0x%x\n", (numPages * PageSize) - 256 *(pos+1) - 16);
     return (numPages * PageSize) - 256*(pos+1) - 16;
 }
 

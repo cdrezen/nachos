@@ -246,7 +246,7 @@ void ExceptionHandler(ExceptionType which)
 
       forkexec->do_ForkExec(filename);
 
-      delete filename;
+      delete[] filename;
 
       break;
     }

@@ -5,5 +5,5 @@ int main()
 {
     ForkExec("test/putchar");
     ForkExec("test/putchar");
-    while(1);
+    //while(1);
 }

@@ -89,7 +89,7 @@ void do_ThreadExit()
 
     t->space->nbUserThreads--;
 
-    DEBUG('t', "thread exit: nbUserThreads=%d\n", t->space->nbUserThreads);//
+    DEBUG('T', "thread exit: name=%s, nbUserThreads=%d, nbProc=%d.\n", t->getName(), t->space->nbUserThreads, forkexec->getNbProc());//
 
     if (DebugIsEnabled('t'))
     {
@@ -98,15 +98,19 @@ void do_ThreadExit()
         machine->DumpMem (str);
     }
 
-    if(t->space->nbUserThreads > 0)
+    t->space->FreeUserStack(machine->ReadRegister(StackReg));//clear(pos)
+
+    if(t->space->nbUserThreads < 1)
     {
-        t->space->FreeUserStack(machine->ReadRegister(StackReg));//clear(pos)
-        t->Finish();
-    }
-    else
-    {
-        bool isChild = t->space->isChild;
+        DEBUG('T', "process exit: %s\n", t->getName());//
+
+        int nbProc = forkexec->getNbProc() - 1;
+        forkexec->setNbProc(nbProc);
+
         delete t->space;
-        if(!isChild) interrupt->Powerdown();
+        
+        if(nbProc == 0) interrupt->Powerdown();
     }
+
+    t->Finish();
 }

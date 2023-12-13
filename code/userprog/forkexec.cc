@@ -26,11 +26,15 @@ void ForkExec::setNbProc(int value)
     nbProc = value;
 }
 
-void ForkExec::StartUserProc(void * arg)
+void ForkExec::StartUserProc(void* arg)
 {
+    //int exit = ((int*)arg)[0];
     DEBUG('t', "StartUserProc.\n");
     
     currentThread->space->InitRegisters();
+
+    //machine->WriteRegister(RetAddrReg, exit);
+    //machine->WriteRegister(RetAddrReg, 0);
 
     currentThread->space->RestoreState ();	// load page table register
 
@@ -61,9 +65,11 @@ int ForkExec::do_ForkExec(char* filename)
     Thread* t = new Thread("proc");
     t->space = space;
     t->space->isChild = true;
+    //int arg[1]; 
+    //arg[0] = machine->ReadRegister(NextPCReg);
     t->Start(StartUserProc, NULL);
     
-    //nbProc++;
+    nbProc++;
 
     return 0;
 }
