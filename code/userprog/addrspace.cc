@@ -68,8 +68,9 @@ List AddrSpaceList;
 
 AddrSpace::AddrSpace (OpenFile * executable)
 {
-    AddrSpace::bitmap = new BitMap(UserStacksAreaSize / 256);
-     AddrSpace::bmap = new Semaphore("Bitmap",1);
+    bitmap = new BitMap(UserStacksAreaSize / 256);
+    findLock = new Lock("findlock");
+    clearLock = new Lock("clearlock");
 
     unsigned int i, size;
 
@@ -204,10 +205,12 @@ int AddrSpace::AllocateUserStack(const int pos)
 
 void AddrSpace::FreeUserStack(const int stackPtr)
 {
-    int pos = ((numPages * PageSize) - 16 - stackPtr) / 256;
-    bmap->P();
-    bitmap->Clear(pos);
-    bmap->V();
+    int pos = -1 + ((numPages * PageSize) - 16 - stackPtr) / 256;
+    if(pos < 0) return;
+    
+    clearLock->Acquire();
+        bitmap->Clear(pos);
+    clearLock->Release();
 }
 
 void
@@ -358,9 +361,9 @@ AddrSpace::RestoreState ()
 
 //Fonction qui rajoute des sémaphores aux méthodes de bitmap.h
 int AddrSpace::synchFind(){
-    bmap->P();
-    int i = bitmap->Find();
-    bmap->V();
+    findLock->Acquire();
+        int i = bitmap->Find();
+    findLock->Release();
     return i;
 }
 

@@ -20,7 +20,7 @@
 #include "list.h"
 #include "bitmap.h"
 
-class Semaphore;
+class Lock;
 
 #define UserStacksAreaSize		1024	// increase this as necessary!
 
@@ -32,7 +32,8 @@ class AddrSpace:public dontcopythis
     bool isChild = false;
 
    BitMap *bitmap;
-   Semaphore *bmap;
+   Lock*  findLock;
+   Lock*  clearLock;
 
     AddrSpace (OpenFile * executable); // Create an address space,
     // initializing it with the program

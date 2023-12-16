@@ -53,23 +53,22 @@ void SimpleThread(void *arg)
     sem_t* io_sem = args->io_sem;
     int compteur_local = 0;
     int tmp_compteur = 0;
+
+    P(sem);
+      tmp_compteur = *compteur;
+    V(sem);
     
-    for (*compteur; *compteur <= BOGDANOF; compteur_local++)
+    for (tmp_compteur; tmp_compteur < BOGDANOF; compteur_local++)
       {
         P(sem);
 
-        //str[1] = name;
-        //str[4] = compteur_local;
-        uintTo8Letters(*compteur, str);//9);
+        if(*compteur <= BOGDANOF) uintTo8Letters(*compteur, str);
         tmp_compteur = (*compteur)++;
+
+        monprintf(io_sem, "(%c) ilocal=%d compteur=%d: %s\n", name, compteur_local, tmp_compteur, str)
         
         V(sem);
-
-        //PutString(str);
-        monprintf(io_sem, "(%c) ilocal=%d compteur=%d: %s\n", name, compteur_local, tmp_compteur, str)
       }
-
-    //ThreadExit();
 }
 
 int main ()
@@ -90,5 +89,5 @@ int main ()
     ThreadCreate(SimpleThread, &b);
     ThreadCreate(SimpleThread, &c);
 
-    ThreadExit();
+    //ThreadExit();
 }
