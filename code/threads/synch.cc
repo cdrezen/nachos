@@ -24,6 +24,7 @@
 #include "copyright.h"
 #include "synch.h"
 #include "system.h"
+#include "thread.h"
 
 //----------------------------------------------------------------------
 // Semaphore::Semaphore
@@ -124,6 +125,7 @@ Lock::Acquire ()
 {
     IntStatus oldLevel = interrupt->SetLevel (IntOff);
 
+    //if(owner == threadToBeDestroyed) lock->V();
     lock->P();
     owner = currentThread;
 

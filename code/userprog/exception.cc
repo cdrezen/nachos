@@ -27,6 +27,8 @@
 //TD2.I.4
 #include "userthread.h"
 
+#include "synchlist.h"
+
 //----------------------------------------------------------------------
 // UpdatePC : Increments the Program Counter register in order to resume
 // the user program immediately after the "syscall" instruction.
@@ -88,23 +90,11 @@ void ExceptionHandler(ExceptionType which)
 
     case SC_Exit: // partie VI
     {
-      //char str[51];
-      int exit = machine->ReadRegister(2); // r2: exit code r0 + 1
-      int res = machine->ReadRegister(4);  // r4 : r2 du programme precedant copié dans r4 (voir start.S)
+      //int exit = machine->ReadRegister(2); // r2: exit code r0 + 1
+      //int res = machine->ReadRegister(4);  // r4 : r2 du programme precedant copié dans r4 (voir start.S)
       
-      //snprintf(str, 51, "programme termine, code=%d val retour=%d.\n", exit, res);
-      //consoledriver->PutString(str);
-      DEBUG('p', "programme termine, code=%d val retour=%d.\n", exit, res);
-
-      int nbProc = forkexec->getNbProc() - 1;
-      forkexec->setNbProc(nbProc);
-
-      delete currentThread->space;
-      
-      if(nbProc == 1)
-      {
-        interrupt->Powerdown(); // a modifier si on voulais faire autre chose ensuite comme executer un autre programme
-      }
+      //DEBUG('p', "processus termine, code=%d val retour=%d.\n", exit, res);
+      do_Exit();
       break;
     }
     case SC_PutChar:
@@ -211,13 +201,6 @@ void ExceptionHandler(ExceptionType which)
     }
    case SC_ThreadExit:
     {
-      /* int nbProc = forkexec->getNbProc() - 1;
-      forkexec->setNbProc(nbProc);
-
-      delete currentThread->space;
-      
-      if(nbProc == 1)
-      { */
       do_ThreadExit();
       break;
     }

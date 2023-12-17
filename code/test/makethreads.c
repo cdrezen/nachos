@@ -1,5 +1,5 @@
 // programme utilisateur qui teste plusieurs threads avec l'utilisation du bitmap
-// StackUserStack = 1024 dans cette exemple 
+// UserStacksAreaSize = 1024 dans cette exemple 
 //!\\ à lancer avec -rs pour un ordonancement généré à partir d'une graine
 
 #include "syscall.h"

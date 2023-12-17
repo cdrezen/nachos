@@ -20,6 +20,8 @@ void GetString(char *s, int n); // Behaves like fgets(3S)
 void PutInt(int i);
 void GetInt(int ptr);
 
+void ReleaseLocks();
+
 private:
 Console *console;
 };

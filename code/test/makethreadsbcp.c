@@ -12,6 +12,8 @@ const unsigned char ASCII_NUM = 0x30;
 const unsigned char ASCII_LET = 0x61;
 
 const unsigned int BONJOAAA = 517595136;
+const unsigned int BONJONAA = 517598464;
+const unsigned int BONJOOAA = 517598720;
 const unsigned int BONJOOLE = 517598900;
 const unsigned int BOGDANOF = 509808101;
 
@@ -58,25 +60,25 @@ void uintTo8Letters(unsigned val, char* str)
 //on a du faire des threads plus 'gourmand' pour qu'ils puissent 'entrer en conflit'
 void ThreadLent(void *arg)
 {
-    unsigned id = (unsigned)arg;     
-    char str[] = "je suis le thread 'aabbccdd'.\n";
-    char* nom = str+19;
+    unsigned id = (unsigned)arg;
+    char str[64];  
+    char fmt[] = "je suis le thread %d:'%s'.\n";//aabbccdd'.\n";
+    char nom[8]; // str+22;
     char bjr[8];
-
     unsigned int i = 0;
 
     uintTo8Letters(id, nom);
-
+    sprintf(str, fmt, id - BOGDANOF + 1, nom);
     PutString(str);
 
     //une operation 'lourde' en temps cpu pour trouver "bonjoole"
-    //en generant beaucoup des mots à partir d'entier et en comparant chacun leurs 3 derniers char
-    for (i = BONJOAAA; i <= BONJOOLE; i++)
+    //en generant beaucoup de mots à partir d'entier et en comparant chacun leurs 3 derniers char
+    for (i = BONJONAA; i <= BONJOOLE; i++)
     {
       uintTo8Letters(i, bjr);
       if(bjr[5] == 'o' && bjr[6] == 'l' && bjr[7] == 'e') break;
     }
-
+    
     for(i=0;i < 8; i++) str[i] = bjr[i];
     str[8] = ' ';
     str[9] = '@'; 
@@ -85,14 +87,14 @@ void ThreadLent(void *arg)
 
     PutString(str);
 
-    ThreadExit();
+    //ThreadExit();
 }
 
 //si ils partagent la meme pile et s'executent 'aleatoirement' ils réécrivent aux même adresses : problemes.
 int main ()
 {
     unsigned nom;
-    const unsigned NB_THREAD = 4;
+    const unsigned NB_THREAD = 12;
     //unsigned noms[NB_THREAD];
 
     for(nom = BOGDANOF; nom < BOGDANOF + NB_THREAD; nom++)
@@ -102,11 +104,11 @@ int main ()
       //PutString("ici le main.\n");
     }
 
-    PutString("main: plus rien a faire.\n");
+    PutString("main makethreadsbcp: plus rien a faire.\n");
 
     //while(1); 
 
-    ThreadExit();
+    //ThreadExit();
 }
 
 //$31 | macro arg

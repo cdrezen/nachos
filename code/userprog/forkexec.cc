@@ -3,6 +3,7 @@
     #include "forkexec.h"
 #endif
 #include "addrspace.h"
+#include "synchlist.h"
 
 ForkExec::ForkExec()
 {
@@ -65,8 +66,8 @@ int ForkExec::do_ForkExec(char* filename)
     Thread* t = new Thread("proc");
     t->space = space;
     t->space->isChild = true;
-    //int arg[1]; 
-    //arg[0] = machine->ReadRegister(NextPCReg);
+    
+    t->space->threadList->Append(t);
     t->Start(StartUserProc, NULL);
     
     nbProc++;

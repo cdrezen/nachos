@@ -22,7 +22,7 @@
 
 class Lock;
 
-#define UserStacksAreaSize		1024	// increase this as necessary!
+#define UserStacksAreaSize		4096	// increase this as necessary!
 
 class AddrSpace:public dontcopythis
 {
@@ -31,9 +31,10 @@ class AddrSpace:public dontcopythis
     //static unsigned int nbAllThreads = 1;
     bool isChild = false;
 
-   BitMap *bitmap;
-   Lock*  findLock;
-   Lock*  clearLock;
+    BitMap*      bitmap;
+    Lock*        findLock;
+    Lock*        clearLock;
+    List*   threadList;
 
     AddrSpace (OpenFile * executable); // Create an address space,
     // initializing it with the program

@@ -85,6 +85,11 @@ void ConsoleDriver::GetString(char *s, int n)
     stringIO->Release();//V();//fourchette disponible
 }
 
+void ConsoleDriver::ReleaseLocks()
+{
+    charIO->Release();
+    stringIO->Release();
+}
 
 
 #endif // CHANGED

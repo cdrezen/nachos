@@ -2,8 +2,10 @@
 #include "system.h"
 #include "synch.h"
 #include "addrspace.h"
+#include "synchlist.h"
 
 int stackPtr;
+int texitaddr;
 // static Semaphore *th = new Semaphore("t",1);
 // static Semaphore *mutexNumThread = new Semaphore("mutexNumThread", 1);
 
@@ -15,6 +17,7 @@ static void StartUserThread(void *schmurtz)
     int arg = args[1];
     int exit = args[2];
     int pos = args[3];
+    if(texitaddr == NULL) texitaddr = exit;
     delete[] args;
 
     DEBUG('t', "StartUserThread   f ptr: %d     arg ptr: %d.\n", f, arg);
@@ -50,7 +53,7 @@ static void StartUserThread(void *schmurtz)
 
 int nameid = 1;
 int* schmurtz;
-char name[8];
+char name[24];
 
 int do_ThreadCreate(int f, int arg, int exit_address)
 {
@@ -60,7 +63,11 @@ int do_ThreadCreate(int f, int arg, int exit_address)
     sprintf(name, "thread%d", nameid++);  
     Thread *t = new Thread(name);
 
-    if(!t) return -1;
+    if(!t) 
+    {
+        delete t;
+        return -1;
+    }
 
     schmurtz = new int[4];
     schmurtz[0] = f;
@@ -70,13 +77,18 @@ int do_ThreadCreate(int f, int arg, int exit_address)
     t->space = currentThread->space;
     int pos = t->space->synchFind();
 
-    if(pos == -1){
+    if(pos == -1)
+    {
         delete[] schmurtz;
+        delete t;
         return -1;
     }
 
     schmurtz[3] = pos;
+
     t->space->nbUserThreads++;
+    t->space->threadList->Append(t);
+
     t->Start(StartUserThread, schmurtz);
     currentThread->Yield();
 
@@ -111,6 +123,52 @@ void do_ThreadExit()
         
         if(nbProc == 0) interrupt->Powerdown();
     }
+    //else if(t->space != NULL) t->space->threadList->Remove(t);
 
     t->Finish();
+}
+
+void do_Exit()
+{
+    ListElement *element;
+
+    for (element = currentThread->space->threadList->FirstElement();
+            element;
+            element = element->next)
+    {
+        Thread *t = (Thread *) element->item;
+        if(t != NULL && t != currentThread)
+        {
+          IntStatus oldLevel = interrupt->SetLevel (IntOff);
+          
+          Thread* oldThread = currentThread;
+
+          currentThread = t;   
+          //scheduler->ReadyToRun(t);
+          //currentThread->SaveUserState();
+          t->RestoreUserState();
+          t->space->RestoreState();
+          
+          //machine->WriteRegister(adReg, machine->ReadRegister(RetAddrReg));
+          //machine->WriteRegister(PCReg, texitaddr);
+          machine->WriteRegister(NextPCReg, texitaddr);
+          //machine->WriteRegister(NextPCReg, texitaddr);
+          //do_ThreadExit();
+          //consoledriver->ReleaseLocks();
+          //t->setStatus(BLOCKED);
+          //t->Finish();
+          t->SaveUserState();
+          t->space->SaveState();
+          //currentThread->RestoreUserState();
+
+          //machine->Run();
+          //delete t;
+          currentThread = oldThread;
+          currentThread->space->RestoreState();
+          //t->Finish();
+
+          (void) interrupt->SetLevel(oldLevel);
+        }
+    } 
+    printf("ça marche pas?\n");
 }

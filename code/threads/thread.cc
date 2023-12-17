@@ -38,6 +38,7 @@
 //      List of all threads, for debugging
 //----------------------------------------------------------------------
 List ThreadList;
+unsigned int Thread::newid = 0;
 
 //----------------------------------------------------------------------
 // Thread::Thread
@@ -50,6 +51,7 @@ List ThreadList;
 Thread::Thread (const char *threadName)
 {
     name = threadName;
+    id = ++newid;
 
     stackTop = NULL;
     stack = NULL;

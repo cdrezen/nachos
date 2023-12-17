@@ -82,6 +82,7 @@ class Thread:public dontcopythis
     // THEY MUST be in this position for SWITCH to work.
     unsigned long *stackTop;            // the current kernel stack pointer
     unsigned long machineState[MachineStateSize]; // all kernel registers except for stackTop
+    static unsigned int newid;
 
   public:
       Thread (const char *debugName);   // initialize a Thread
@@ -121,7 +122,7 @@ class Thread:public dontcopythis
 #endif
 
     // some of the private data for this class is listed above
-
+    unsigned int id;
     unsigned long *stack;       // Bottom of the stack
     size_t stack_size;          // Stack size
     // NULL if this is the main thread

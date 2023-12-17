@@ -20,6 +20,7 @@
 #include "addrspace.h"
 #include "noff.h"
 #include "syscall.h"
+#include "synchlist.h"
 
 
 //----------------------------------------------------------------------
@@ -71,6 +72,7 @@ AddrSpace::AddrSpace (OpenFile * executable)
     bitmap = new BitMap(UserStacksAreaSize / 256);
     findLock = new Lock("findlock");
     clearLock = new Lock("clearlock");
+    threadList = new List();
 
     unsigned int i, size;
 
@@ -160,6 +162,7 @@ AddrSpace::~AddrSpace ()
   pageTable = NULL;
   machine->currentPageTable = NULL;
   delete bitmap;
+  delete threadList;
 
   AddrSpaceList.Remove(this);
 }
