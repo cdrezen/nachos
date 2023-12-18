@@ -86,6 +86,8 @@ int do_ThreadCreate(int f, int arg, int exit_address)
 
     schmurtz[3] = pos;
 
+    //int nbThreads = t->space->getNbThreads() + 1;
+    //t->space->setNbThreads(nbThreads);
     t->space->nbUserThreads++;
     t->space->threadList->Append(t);
 
@@ -99,7 +101,9 @@ void do_ThreadExit()
 {
     Thread* t = currentThread;
 
-    t->space->nbUserThreads--;
+    //t->space->nbUserThreads--;
+    int nbThreads = t->space->getNbThreads() - 1;
+    t->space->setNbThreads(nbThreads);
 
     DEBUG('T', "thread exit: name=%s, nbUserThreads=%d, nbProc=%d.\n", t->getName(), t->space->nbUserThreads, forkexec->getNbProc());//
 
@@ -112,7 +116,7 @@ void do_ThreadExit()
 
     t->space->FreeUserStack(machine->ReadRegister(StackReg));//clear(pos)
 
-    if(t->space->nbUserThreads < 1)
+    if(t->space->getNbThreads() < 1)//t->space->nbUserThreads < 1)
     {
         DEBUG('T', "process exit: %s\n", t->getName());//
 
@@ -144,31 +148,60 @@ void do_Exit()
           Thread* oldThread = currentThread;
 
           currentThread = t;   
-          //scheduler->ReadyToRun(t);
           //currentThread->SaveUserState();
           t->RestoreUserState();
           t->space->RestoreState();
           
           //machine->WriteRegister(adReg, machine->ReadRegister(RetAddrReg));
           //machine->WriteRegister(PCReg, texitaddr);
-          machine->WriteRegister(NextPCReg, texitaddr);
+          machine->WriteRegister(NextPCReg, machine->ReadRegister(RetAddrReg));
           //machine->WriteRegister(NextPCReg, texitaddr);
           //do_ThreadExit();
           //consoledriver->ReleaseLocks();
           //t->setStatus(BLOCKED);
-          //t->Finish();
           t->SaveUserState();
           t->space->SaveState();
+          //t->Finish();
           //currentThread->RestoreUserState();
 
           //machine->Run();
-          //delete t;
           currentThread = oldThread;
           currentThread->space->RestoreState();
+          
+          //delete t;
+          //ThreadList.Append(t);
+          //ThreadList.Remove(t);
+          
           //t->Finish();
+          //scheduler->ReadyToRun(t);
 
           (void) interrupt->SetLevel(oldLevel);
         }
     } 
+
+    //delete currentThread->space;
     printf("ça marche pas?\n");
 }
+
+/* void do_Exit()
+{
+    ListElement *element;
+
+    currentThread->space->FreeUserStack(machine->ReadRegister(StackReg));
+
+    for (element = currentThread->space->threadList->FirstElement();
+            element;
+            element = element->next)
+    {
+        Thread *t = (Thread *) element->item;
+        if(t != NULL)
+        {
+            t->space->RestoreState();
+            t->space->FreeUserStack(machine->ReadRegister(StackReg));
+        }
+    } 
+
+    delete currentThread->space;
+    currentThread->Finish();
+    printf("ça marche pas?\n");
+} */

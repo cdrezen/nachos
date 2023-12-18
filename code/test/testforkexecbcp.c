@@ -1,7 +1,7 @@
 #include "syscall.h"
 // à lancer depuis /code
 //lance 12 processus 'lent', chacun avec un 12 de threads.
-//-rs 1234 déclenche une erreur, peut etre qu'il manque un verrou quelque part?
+//-rs 1234 est la seul graine que l'on a trouvé qui déclenche une erreur, peut etre qu'il manque un verrou quelque part?
 
 int main()
 {

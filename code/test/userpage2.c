@@ -1,3 +1,6 @@
+//lance un processus qui lance 27 threads affichant chacun une lettre de l’alphabet excepté un thread qui doit arreter tout les autres, toutes les lettres ne doivent pas être affichées.
+//ne fonctionne pas
+
 #include "syscall.h"
 
 void SimpleThread(void *arg)

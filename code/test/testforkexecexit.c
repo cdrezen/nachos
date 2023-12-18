@@ -1,6 +1,9 @@
 #include "syscall.h"
 // à lancer depuis /code
-//lance 12 processus 'lent', chacun avec un 12 de threads.
+//Bonus II.5 lance un processus qui crée plusieurs thread dont un qui appel explicitement Exit afin de tester l'appel à Exit pour terminer les autres thread du processus prématurément.
+//lance un processus qui lance 27 threads affichant chacun une lettre de l’alphabet excepté un thread qui doit arreter tout les autres, toutes les lettres ne doivent pas être affichées.
+
+//ne fonctionne pas
 
 int main()
 {

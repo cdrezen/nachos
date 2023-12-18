@@ -34,12 +34,16 @@ class AddrSpace:public dontcopythis
     BitMap*      bitmap;
     Lock*        findLock;
     Lock*        clearLock;
+    Lock*        nbThreadLock;
     List*   threadList;
 
     AddrSpace (OpenFile * executable); // Create an address space,
     // initializing it with the program
     // stored in the file "executable"
     ~AddrSpace ();              // De-allocate an address space
+
+    int getNbThreads();
+    void setNbThreads(int value);
 
     int AllocateUserStack(const int pos);
     void FreeUserStack(const int stackPtr);

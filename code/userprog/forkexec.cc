@@ -12,19 +12,22 @@ ForkExec::ForkExec()
 
 ForkExec::~ForkExec()
 {
-    
+    delete lock;
 }
 
 int ForkExec::getNbProc()
 {
-    //synchro?
-    return nbProc;
+    lock->Acquire();
+    int res = nbProc;
+    lock->Release();
+    return res;
 }
 
 void ForkExec::setNbProc(int value)
 {
-    //synchro?
+    lock->Acquire();
     nbProc = value;
+    lock->Release();
 }
 
 void ForkExec::StartUserProc(void* arg)

@@ -72,6 +72,7 @@ AddrSpace::AddrSpace (OpenFile * executable)
     bitmap = new BitMap(UserStacksAreaSize / 256);
     findLock = new Lock("findlock");
     clearLock = new Lock("clearlock");
+    nbThreadLock = new Lock("nbthreadlock");
     threadList = new List();
 
     unsigned int i, size;
@@ -176,6 +177,21 @@ AddrSpace::~AddrSpace ()
 //      will be saved/restored into the currentThread->userRegisters
 //      when this thread is context switched out.
 //----------------------------------------------------------------------
+
+int AddrSpace::getNbThreads()
+{
+    nbThreadLock->Acquire();
+    int res = nbUserThreads;
+    nbThreadLock->Release();
+    return res;
+}
+
+void AddrSpace::setNbThreads(int value)
+{
+    nbThreadLock->Acquire();
+    nbUserThreads = value;
+    nbThreadLock->Release();
+}
 
 void
 AddrSpace::InitRegisters ()
